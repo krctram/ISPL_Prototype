@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TNCSC Tender Supply Tracker — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2A4A; --ink-soft:#2E3E62;
+    --paper:#F6F3EC; --card:#FFFFFF;
+    --gold:#B98328; --gold-soft:#EFDDB2; --gold-pale:#FBF3E3;
+    --slate:#5B6478;
+    --rust:#B5503A; --rust-pale:#F5E2DC;
+    --green:#3E7A54; --green-pale:#DEEAE1;
+    --line:#E1DACA; --line-strong:#CBC0A2;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:"Public Sans",sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4{font-family:"Fraunces",serif;margin:0;font-weight:600;color:var(--ink);}
+  .mono{font-family:"IBM Plex Mono",monospace;}
+  a{color:inherit;} button{font-family:inherit;cursor:pointer;}
+  .grain{position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.035;mix-blend-mode:multiply;background-image:radial-gradient(circle at 1px 1px, #000 1px, transparent 0);background-size:3px 3px;}
+
+  header.top{position:sticky;top:0;z-index:50;background:var(--ink);color:#EFE9DA;padding:16px 28px;box-shadow:0 1px 0 rgba(0,0,0,.15);}
+  .top-row{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:12px;cursor:pointer;}
+  .brand .mark{width:38px;height:38px;border-radius:8px;background:linear-gradient(155deg,var(--gold) 0%, #8f6318 100%);display:flex;align-items:center;justify-content:center;font-family:"Fraunces",serif;font-weight:700;color:#1B2A4A;font-size:17px;flex:none;}
+  .brand .name{font-family:"Fraunces",serif;font-size:19px;font-weight:600;color:#fff;}
+  .brand .sub{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:#C7BFA8;}
+  .back-btn{display:flex;align-items:center;gap:8px;color:#E7E1D2;font-size:13.5px;font-weight:600;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);padding:8px 14px;border-radius:7px;}
+  .back-btn:hover{background:rgba(255,255,255,.13);}
+  .top-actions{display:flex;gap:10px;align-items:center;}
+  .btn-gold{background:var(--gold);color:#fff;border:none;padding:9px 16px;border-radius:7px;font-size:13.5px;font-weight:600;}
+  .btn-gold:hover{background:#a3771f;}
+
+  main{max-width:1360px;margin:0 auto;padding:26px 28px 80px;}
+
+  /* -------- dashboard -------- */
+  .dash-toolbar{display:flex;gap:12px;align-items:center;margin-bottom:20px;flex-wrap:wrap;}
+  .search-box{flex:1;min-width:220px;position:relative;}
+  .search-box input{width:100%;padding:10px 14px 10px 36px;border:1px solid var(--line-strong);border-radius:8px;font-size:13.8px;background:var(--card);color:var(--ink);}
+  .search-box input:focus{outline:none;border-color:var(--gold);}
+  .search-box .ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--slate);font-size:14px;}
+  .filter-chip{border:1px solid var(--line-strong);background:var(--card);color:var(--slate);padding:8px 14px;border-radius:20px;font-size:13px;font-weight:600;}
+  .filter-chip.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+  .stat-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:22px;}
+  .stat-mini{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;}
+  .stat-mini .n{font-family:"Fraunces",serif;font-size:24px;font-weight:600;}
+  .stat-mini .l{font-size:12px;color:var(--slate);margin-top:2px;}
+
+  .tender-list{display:flex;flex-direction:column;gap:10px;}
+  .tender-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;cursor:pointer;transition:box-shadow .15s, border-color .15s;display:flex;flex-direction:column;gap:10px;}
+  .tender-card:hover{box-shadow:0 3px 14px rgba(27,42,74,.08);border-color:var(--line-strong);}
+  .tc-id{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--slate);}
+  .tc-row-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+  .tc-title{font-size:15.5px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+  .tc-meta{font-size:12.5px;color:var(--slate);display:flex;gap:14px;flex-wrap:wrap;}
+  .tc-top-right{display:flex;align-items:center;gap:14px;flex:none;}
+  .tc-stage-row{display:flex;align-items:center;gap:16px;}
+  .tc-stage-info{flex:1;min-width:0;}
+  .tc-stage-info .lbl{font-size:11.5px;color:var(--slate);margin-bottom:5px;}
+  .tc-stage-info .name{font-size:13px;font-weight:600;color:var(--ink);}
+  .tc-track{height:6px;border-radius:4px;background:var(--gold-pale);overflow:hidden;flex:1;min-width:120px;}
+  .tc-fill{height:100%;background:linear-gradient(90deg,var(--gold),#8f6318);}
+  .tc-pct{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--slate);flex:none;width:36px;text-align:right;}
+  .chip{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11.5px;font-weight:600;font-family:"IBM Plex Mono",monospace;flex:none;}
+  .chip.green{background:var(--green-pale);color:var(--green);}
+  .chip.gold{background:var(--gold-soft);color:#8f6318;}
+  .chip.rust{background:var(--rust-pale);color:var(--rust);}
+  .chip.slate{background:#EFEBE0;color:var(--slate);}
+  .tc-arrow{color:var(--line-strong);font-size:20px;flex:none;}
+  .tender-card:hover .tc-arrow{color:var(--gold);}
+
+  /* add tender modal */
+  .modal-overlay{position:fixed;inset:0;background:rgba(27,42,74,.45);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--card);border-radius:12px;padding:26px 28px;max-width:440px;width:100%;}
+  .modal h3{font-size:19px;margin-bottom:16px;}
+  .field{margin-bottom:14px;}
+  .field label{font-size:12.5px;font-weight:600;color:var(--slate);display:block;margin-bottom:5px;}
+  .field input,.field select{width:100%;padding:9px 12px;border:1px solid var(--line-strong);border-radius:7px;font-size:13.8px;font-family:inherit;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+  .btn-ghost{background:none;border:1px solid var(--line-strong);color:var(--ink);padding:9px 16px;border-radius:7px;font-size:13.5px;font-weight:600;}
+
+  /* -------- tender detail -------- */
+  .detail-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px;}
+  .detail-top h1{font-size:24px;}
+  .detail-top .meta-row{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--slate);margin-top:6px;}
+  .detail-top .meta-row b{color:var(--ink);}
+
+
+  .progress-strip{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:20px;}
+  .progress-strip .ptext{font-size:13.5px;color:var(--slate);}
+  .progress-strip .ptext b{color:var(--ink);font-weight:600;}
+  .progress-track{flex:1;min-width:160px;height:8px;border-radius:5px;background:var(--gold-pale);overflow:hidden;}
+  .progress-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold),#8f6318);transition:width .4s ease;}
+  .progress-strip .pct{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink);font-weight:600;}
+
+  main.stage-content{min-width:0;}
+
+  /* horizontal stage tab bar */
+  .stage-tabbar{position:relative;margin-bottom:22px;}
+  .stage-tabbar .track-line{position:absolute;top:19px;left:0;right:0;height:2px;background:var(--line-strong);z-index:0;}
+  .stage-tabs{display:flex;gap:2px;overflow-x:auto;padding-bottom:6px;position:relative;z-index:1;scrollbar-width:thin;}
+  .stage-tabs::-webkit-scrollbar{height:6px;}
+  .stage-tabs::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:4px;}
+  .step{display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 12px 10px;border-radius:8px;cursor:pointer;flex:none;width:132px;background:var(--paper);}
+  .step .dot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600;border:2px solid var(--line-strong);color:var(--slate);background:var(--card);flex:none;}
+  .step.done .dot{background:var(--green);border-color:var(--green);color:#fff;}
+  .step.current .dot{background:var(--gold);border-color:var(--gold);color:#fff;box-shadow:0 0 0 4px var(--gold-soft);}
+  .step.selected .dot{transform:scale(1.1);}
+  .step .body{text-align:center;}
+  .step .phase{font-size:10.5px;font-weight:700;letter-spacing:.03em;color:var(--ink);line-height:1.25;margin-bottom:6px;min-height:26px;display:flex;align-items:center;justify-content:center;}
+  .step.current .phase{color:#8f6318;}
+  .step.selected .phase{text-decoration:underline;text-decoration-color:var(--gold-soft);text-decoration-thickness:2px;}
+  .step .status-tag{font-size:9.5px;display:inline-block;padding:1px 8px;border-radius:10px;font-family:"IBM Plex Mono",monospace;white-space:nowrap;}
+  .step.done .status-tag{background:var(--green-pale);color:var(--green);}
+  .step.current .status-tag{background:var(--gold-soft);color:#8f6318;}
+  .step.pending .status-tag{background:#EFEBE0;color:var(--slate);}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px;}
+  .detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px;}
+  .detail-head .eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:600;margin-bottom:6px;}
+  .detail-head h2{font-size:25px;}
+  .detail-desc{color:var(--slate);font-size:14.5px;max-width:640px;margin-top:8px;}
+  .stage-status-pill{padding:6px 14px;border-radius:20px;font-size:12.5px;font-weight:600;flex:none;font-family:"IBM Plex Mono",monospace;}
+  .stage-status-pill.done{background:var(--green-pale);color:var(--green);}
+  .stage-status-pill.current{background:var(--gold-soft);color:#8f6318;}
+  .stage-status-pill.pending{background:#EFEBE0;color:var(--slate);}
+  .note{margin-top:16px;border-left:3px solid var(--gold);background:var(--gold-pale);padding:11px 15px;border-radius:0 6px 6px 0;font-size:13.5px;color:#6b4c14;}
+  .note.alert{border-left-color:var(--rust);background:var(--rust-pale);color:#7a3722;}
+
+  .section-lbl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--slate);font-weight:600;margin:22px 0 10px;}
+  .checklist{display:flex;flex-direction:column;gap:9px;}
+  .qa-list{display:flex;flex-direction:column;gap:14px;}
+  .qa-item{border:1px solid var(--line);border-radius:8px;padding:14px 16px;background:#FDFCF9;}
+  .qa-item.answered{background:var(--green-pale);border-color:#c4dccb;}
+  .qa-label{font-size:14px;font-weight:600;color:var(--ink);display:block;margin-bottom:6px;}
+  .qa-input{width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:9px 12px;font-family:inherit;font-size:13.8px;color:var(--ink);background:#fff;resize:vertical;margin-top:6px;}
+  .qa-input:focus{outline:none;border-color:var(--gold);}
+  .check-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:#FDFCF9;}
+  .check-item input[type=checkbox]{width:18px;height:18px;margin-top:1px;accent-color:var(--green);flex:none;}
+  .check-item .ci-text{font-size:14px;color:var(--ink);flex:1;}
+  .check-item .ci-sub{font-size:12.5px;color:var(--slate);margin-top:2px;}
+  .check-item.checked{background:var(--green-pale);border-color:#c4dccb;}
+  .check-item.checked .ci-text{color:var(--green);text-decoration:line-through;text-decoration-color:#9dc4ab;}
+
+  .doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;}
+  .doc-tile{border:1.5px dashed var(--line-strong);border-radius:8px;padding:16px 14px;text-align:center;background:#FDFCF9;}
+  .doc-tile.uploaded{border-style:solid;border-color:#c4dccb;background:var(--green-pale);}
+  .doc-tile .icon{font-size:22px;margin-bottom:6px;}
+  .doc-tile .dname{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+  .doc-tile .dstatus{font-size:11.5px;color:var(--slate);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .doc-tile.uploaded .dstatus{color:var(--green);}
+  .doc-btn-row{display:flex;gap:6px;}
+  .cap-btn{border:1px solid var(--gold);background:var(--gold-pale);color:#8f6318;font-size:12px;font-weight:600;padding:6px 10px;border-radius:6px;flex:1;}
+  .doc-tile.uploaded .cap-btn{border-color:#9dc4ab;background:#fff;color:var(--green);}
+  .rm-btn{border:1px solid var(--rust-pale);background:#fff;color:var(--rust);font-size:12px;font-weight:600;padding:6px 9px;border-radius:6px;}
+
+  .audit-trail{display:flex;gap:0;margin-top:6px;flex-wrap:wrap;}
+  .audit-node{flex:1;min-width:130px;text-align:center;position:relative;padding:0 4px;}
+  .audit-node .bubble{width:40px;height:40px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;border:2px solid var(--line-strong);background:var(--card);color:var(--slate);font-size:15px;}
+  .audit-node.pass .bubble{background:var(--green);border-color:var(--green);color:#fff;}
+  .audit-node.active .bubble{background:var(--gold);border-color:var(--gold);color:#fff;}
+  .audit-node .lbl{font-size:12px;font-weight:600;color:var(--ink);}
+  .audit-node .sub{font-size:11px;color:var(--slate);margin-top:2px;}
+  .audit-connector{position:absolute;top:20px;left:-50%;width:100%;height:2px;background:var(--line-strong);z-index:0;}
+  .audit-node:first-child .audit-connector{display:none;}
+  .audit-node.pass .audit-connector{background:var(--green);}
+
+  .stage-nav-btns{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:14px;flex-wrap:wrap;}
+  .nav-btn{background:var(--card);border:1px solid var(--line-strong);color:var(--ink);padding:9px 18px;border-radius:7px;font-size:13.5px;font-weight:600;}
+  .nav-btn:hover{border-color:var(--gold);color:var(--gold);}
+  .nav-btn:disabled{opacity:.35;cursor:not-allowed;}
+  .nav-btn:disabled:hover{border-color:var(--line-strong);color:var(--ink);}
+  .nav-btn.primary{background:var(--gold);border-color:var(--gold);color:#fff;}
+  .nav-btn.primary:hover{background:#a3771f;border-color:#a3771f;color:#fff;}
+  .nav-btn.primary:disabled{background:#EFEBE0;border-color:var(--line-strong);color:var(--slate);}
+  .nav-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end;}
+  .gate-hint{font-size:12px;color:var(--rust);max-width:280px;text-align:right;}
+
+  @media (max-width:640px){
+    .tc-row-top{flex-direction:column;align-items:flex-start;gap:8px;}
+    .tc-top-right{align-self:flex-end;}
+  }
+  ::selection{background:var(--gold-soft);}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<header class="top">
+  <div class="top-row">
+    <div class="brand" id="brandHome">
+      <div class="mark">TN</div>
+      <div>
+        <div class="name" id="headerName">Tender Supply Tracker</div>
+        <div class="sub" id="headerSub">Tamil Nadu Civil Supplies Corporation</div>
+      </div>
+    </div>
+    <div class="top-actions" id="topActions"></div>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>New tender</h3>
+    <div class="field"><label>Tender ID</label><input id="f-id" placeholder="TN/CS/2026/0xx"></div>
+    <div class="field"><label>Commodity</label><input id="f-commodity" placeholder="e.g. Rice (PDS)"></div>
+    <div class="field"><label>Region</label><input id="f-region" placeholder="e.g. Coimbatore"></div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelModal">Cancel</button>
+      <button class="btn-gold" id="saveModal">Add tender</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= stage template (shared by every tender/spell) ================= */
+const stageTemplate = [
+  { phase:"Tender Analysis", title:"Tender Analysis & Eligibility Review",
+    desc:"Review the notification in detail before committing to bid — this is the internal go/no-go check, and nothing here reaches TNCSC. Move to the Tender Stage once every question is answered and the analysis document is attached.",
+    asQuestions:true,
+    steps:[
+      {t:"What are the eligibility criteria for this tender, and do we meet them?"},
+      {t:"What quantity is being tendered, and can it be supplied within scope?"},
+      {t:"What specifications are called for?"},
+      {t:"What are the key timelines and deadlines for this tender?"},
+    ],
+    docs:["Tender Analysis Document"],
+    note:{type:"note", text:"This tab is the gate: all four questions and the analysis document are required before you can move to the Tender Stage. Until then, you can only save and close."} },
+
+  { phase:"Tender Stage", title:"Tender Notification & Bid Submission",
+    desc:"From the notification on the government portal through to freezing and submitting the bid.",
+    steps:[
+      {t:"Tender notification released by TNCSC", s:"Sourced from the government tender portal."},
+      {t:"Tender documentation prepared"},
+      {t:"Earnest Money Deposit (EMD) submitted"},
+      {t:"Technical documents uploaded to the tender portal"},
+      {t:"Price bid uploaded"},
+      {t:"Bid frozen & submitted before deadline"},
+    ],
+    docs:["EMD Receipt","Technical Bid Documents","Price Bid Document"],
+    note:{type:"note", text:"Every item above is a manual submission — this stage runs as a checklist until the portal accepts it."} },
+
+  { phase:"Bid Evaluation Stage", title:"Technical & Financial Bid Evaluation",
+    desc:"TNCSC and its third-party evaluator work through capacity checks and pricing before issuing the confirmation order.",
+    steps:[
+      {t:"Technical bid opened by TNCSC", s:"A third party evaluates the bidder's supply capacity."},
+      {t:"Technical evaluation results declared"},
+      {t:"Financial bid opened", s:"Only for bidders who cleared technical evaluation."},
+      {t:"Negotiations", s:"If TNCSC calls for them."},
+      {t:"Confirmation Order / Letter of Acceptance issued"},
+    ],
+    docs:["Technical Evaluation Result","Letter of Acceptance"] },
+
+  { phase:"Allocation Stage", title:"Region-wise Allocation",
+    desc:"TNCSC issues the sub-allotment letter for the region and the award is recorded as a Sale Order in the ERP.",
+    steps:[
+      {t:"Sub-allotment letter issued region-wise by TNCSC"},
+      {t:"Recorded as a Sale Order in ERP"},
+    ],
+    docs:["Sub-allotment Letter"] },
+
+  { phase:"Security & Agreement Stage", title:"Security Deposit & Agreement Execution",
+    desc:"Formalising the award with a bank guarantee and signed agreement, while the original EMD works its way back.",
+    steps:[
+      {t:"Security Deposit / Bank Guarantee (BG) submitted"},
+      {t:"Agreement executed between supplier and TNCSC"},
+      {t:"EMD refund tracked", s:"Post sub-allotment release, tender failure, or cancellation."},
+    ],
+    docs:["Bank Guarantee","Signed Agreement"] },
+
+  { phase:"Supply & Dispatch Stage", title:"Supply Commencement & Dispatch",
+    desc:"Physical movement begins — supply against the agreed schedule, cargo out to the allotted depots.",
+    steps:[
+      {t:"Supply commenced as per schedule"},
+      {t:"Cargo dispatched to designated depots with invoice"},
+    ],
+    docs:["Dispatch Invoice"] },
+
+  { phase:"Delivery & Documentation Stage", title:"Godown Delivery & Document Capture",
+    desc:"Once the truck unloads at the destination godown, four documents are collected before billing can start — this is the stage the whole billing chain depends on.",
+    steps:[
+      {t:"Acknowledgement of receipt from depot authorities"},
+      {t:"Weighment slip obtained"},
+      {t:"Quality certificate obtained"},
+      {t:"Stock certificate obtained"},
+    ],
+    docs:["Acknowledgement","Weighment Slip","Quality Certificate","Stock Certificate"],
+    imageDocs:true,
+    note:{type:"alert", text:"Billing is generated directly off these four documents — a gap or a blurry scan here stalls the bill, not just the record."} },
+
+  { phase:"Billing & Payment Stage", title:"Invoice Consolidation & Multi-level Audit",
+    desc:"Multiple invoices roll up into a single bill submitted to TNCSC, then move through four audit sections before 95% of funds release, subject to availability.",
+    steps:[
+      {t:"Invoices consolidated into a single bill"},
+      {t:"Bill submitted to TNCSC with supporting documents"},
+    ],
+    docs:["Consolidated Bill"],
+    auditTrail:true },
+
+  { phase:"Completion Stage", title:"Region-wise Completion Certificate",
+    desc:"Once a spell's supply is fully discharged, the region-wise completion certificate unlocks the two release stages that follow.",
+    steps:[{t:"Apply for region-wise completion certificate"}],
+    docs:["Completion Certificate"] },
+
+  { phase:"Retention Money Release", title:"5% Retention Release",
+    desc:"With the completion certificate in hand, the retained 5% can be requested back.",
+    steps:[{t:"Request letter submitted for release of 5% retention money"}],
+    docs:["Retention Release Request Letter"] },
+
+  { phase:"Security Deposit / BG Release", title:"Bank Guarantee Return",
+    desc:"The final financial exposure on the spell — requesting the original BG or security deposit back after successful completion.",
+    steps:[{t:"Request letter submitted for return of original BG / Security Deposit"}],
+    docs:["BG Release Request Letter"] },
+
+  { phase:"Tender Completion", title:"Tender Close-out",
+    desc:"With supply fully discharged and all releases processed, TNCSC issues the overall tender completion certificate.",
+    steps:[{t:"Tender completion certificate received from TNCSC"}],
+    docs:["Tender Completion Certificate"] },
+];
+const STAGE_COUNT = stageTemplate.length;
+
+/* ================= seed data ================= */
+function makeProgress(currentIndex, checkedStages, docStages){
+  const checks = {}; const docs = {}; const answers = {};
+  checkedStages.forEach(si=>{
+    const s = stageTemplate[si];
+    if(s.asQuestions){ s.steps.forEach((_,j)=> answers[si+"-"+j] = "Reviewed and confirmed — no blockers identified."); }
+    else { s.steps.forEach((_,j)=> checks[si+"-"+j]=1); }
+  });
+  docStages.forEach(si=>{ (stageTemplate[si].docs||[]).forEach((_,j)=> docs[si+"-"+j]={name:"scan_"+(si+1)+"_"+(j+1)+".pdf"} ); });
+  return { currentIndex, checks, docs, answers };
+}
+function seq(n){ return Array.from({length:n}, (_,i)=>i); }
+
+let tenders = [
+  { id:"TN/CS/2026/014", commodity:"Rice (PDS)", region:"Coimbatore", value:"₹4.8Cr", notified:"02 Jun 2026", status:"Active",
+    ...makeProgress(7, seq(7), seq(7)) },
+  { id:"TN/CS/2026/009", commodity:"Wheat Flour", region:"Trichy", value:"₹2.1Cr", notified:"18 May 2026", status:"Active",
+    ...makeProgress(5, seq(5), seq(5)) },
+  { id:"TN/CS/2025/077", commodity:"Toor Dal", region:"Madurai", value:"₹1.6Cr", notified:"09 Nov 2025", status:"Completed",
+    ...makeProgress(12, seq(12), seq(12)) },
+  { id:"TN/CS/2026/021", commodity:"Sugar", region:"Salem", value:"₹3.3Cr", notified:"27 Jun 2026", status:"Active",
+    ...makeProgress(0, [], []) },
+  { id:"TN/CS/2025/061", commodity:"Palm Oil", region:"Chennai", value:"₹5.0Cr", notified:"14 Oct 2025", status:"Active",
+    ...makeProgress(10, seq(10), seq(10)) },
+  { id:"TN/CS/2025/048", commodity:"Rice (PDS)", region:"Tirunelveli", value:"₹4.2Cr", notified:"22 Aug 2025", status:"Completed",
+    ...makeProgress(12, seq(12), seq(12)) },
+];
+
+/* ================= app state / router ================= */
+let view = "dashboard";          // "dashboard" | "tender"
+let currentTenderId = null;
+let selectedStage = 0;
+let search = "";
+let statusFilter = "All";
+
+function getTender(){ return tenders.find(t=>t.id===currentTenderId); }
+function tenderProgress(t){ return Math.round((Math.min(t.currentIndex,STAGE_COUNT)/STAGE_COUNT)*100); }
+function goDashboard(){ view="dashboard"; currentTenderId=null; render(); }
+function openTender(id){ view="tender"; currentTenderId=id; selectedStage=0; render(); }
+
+/* ================= render: header ================= */
+function renderHeader(){
+  document.getElementById("headerName").textContent = view==="dashboard" ? "Tender Supply Tracker" : getTender().id;
+  document.getElementById("headerSub").textContent = view==="dashboard" ? "Tamil Nadu Civil Supplies Corporation" : getTender().commodity+" · "+getTender().region;
+  const actions = document.getElementById("topActions");
+  if(view==="dashboard"){
+    actions.innerHTML = `<button class="btn-gold" id="newTenderBtn">+ New tender</button>`;
+    document.getElementById("newTenderBtn").onclick = ()=> document.getElementById("modalOverlay").classList.add("open");
+  } else {
+    actions.innerHTML = `<button class="back-btn" id="backBtn">&larr; All tenders</button>`;
+    document.getElementById("backBtn").onclick = goDashboard;
+  }
+}
+document.getElementById("brandHome").addEventListener("click", goDashboard);
+
+/* ================= render: dashboard ================= */
+function renderDashboard(){
+  let list = tenders.filter(t=>{
+    const matchesSearch = (t.id+t.commodity+t.region).toLowerCase().includes(search.toLowerCase());
+    const matchesStatus = statusFilter==="All" || t.status===statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
+  const activeCount = tenders.filter(t=>t.status==="Active").length;
+  const completedCount = tenders.filter(t=>t.status==="Completed").length;
+  const avgProgress = Math.round(tenders.reduce((a,t)=>a+tenderProgress(t),0)/tenders.length);
+
+  document.getElementById("app").innerHTML = `
+    <div class="stat-strip">
+      <div class="stat-mini"><div class="n">${tenders.length}</div><div class="l">Total tenders</div></div>
+      <div class="stat-mini"><div class="n">${activeCount}</div><div class="l">Active</div></div>
+      <div class="stat-mini"><div class="n">${completedCount}</div><div class="l">Completed</div></div>
+      <div class="stat-mini"><div class="n">${avgProgress}%</div><div class="l">Average progress</div></div>
+    </div>
+    <div class="dash-toolbar">
+      <div class="search-box"><span class="ic">&#128269;</span><input id="searchInput" placeholder="Search by tender ID, commodity or region" value="${search}"></div>
+      <button class="filter-chip ${statusFilter==='All'?'active':''}" data-f="All">All</button>
+      <button class="filter-chip ${statusFilter==='Active'?'active':''}" data-f="Active">Active</button>
+      <button class="filter-chip ${statusFilter==='Completed'?'active':''}" data-f="Completed">Completed</button>
+    </div>
+    <div class="tender-list" id="tenderList">
+      ${list.map(t=>renderTenderCard(t)).join("") || `<div class="card" style="text-align:center;color:var(--slate);">No tenders match that search.</div>`}
+    </div>
+  `;
+
+  document.getElementById("searchInput").oninput = (e)=>{ search=e.target.value; renderDashboard(); };
+  document.querySelectorAll(".filter-chip").forEach(b=> b.onclick = ()=>{ statusFilter=b.dataset.f; renderDashboard(); });
+  document.querySelectorAll(".tender-card").forEach(c=> c.onclick = ()=> openTender(c.dataset.id));
+}
+
+function renderTenderCard(t){
+  const pct = tenderProgress(t);
+  const curStageName = stageTemplate[Math.min(t.currentIndex, STAGE_COUNT-1)].title;
+  const statusChip = t.status==="Completed" ? '<span class="chip green">Completed</span>' : '<span class="chip gold">Active</span>';
+  return `
+  <div class="tender-card" data-id="${t.id}">
+    <div class="tc-row-top">
+      <div>
+        <div class="tc-title">${t.commodity} <span class="tc-id">· ${t.id}</span></div>
+        <div class="tc-meta"><span>${t.region}</span><span>${t.value}</span><span>Notified ${t.notified}</span></div>
+      </div>
+      <div class="tc-top-right">
+        ${statusChip}
+        <div class="tc-arrow">&rarr;</div>
+      </div>
+    </div>
+    <div class="tc-stage-row">
+      <div class="tc-stage-info">
+        <div class="lbl">Stage ${Math.min(t.currentIndex+1,STAGE_COUNT)} of ${STAGE_COUNT}</div>
+        <div class="name">${curStageName}</div>
+      </div>
+      <div class="tc-track"><div class="tc-fill" style="width:${pct}%"></div></div>
+      <div class="tc-pct">${pct}%</div>
+    </div>
+  </div>`;
+}
+
+/* ================= modal: new tender ================= */
+document.getElementById("cancelModal").onclick = ()=> document.getElementById("modalOverlay").classList.remove("open");
+document.getElementById("saveModal").onclick = ()=>{
+  const id = document.getElementById("f-id").value.trim() || "TN/CS/2026/0"+(90+tenders.length);
+  const commodity = document.getElementById("f-commodity").value.trim() || "Rice (PDS)";
+  const region = document.getElementById("f-region").value.trim() || "Chennai";
+  tenders.unshift({ id, commodity, region, value:"₹—", notified:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}), status:"Active", ...makeProgress(0, [], []) });
+  document.getElementById("modalOverlay").classList.remove("open");
+  ["f-id","f-commodity","f-region"].forEach(id=>document.getElementById(id).value="");
+  renderDashboard();
+};
+
+/* ================= render: tender detail ================= */
+function stageStatus(i){
+  const t = getTender();
+  if(i < t.currentIndex) return "done";
+  if(i === t.currentIndex) return "current";
+  return "pending";
+}
+function stageComplete(t, i){
+  const st = stageTemplate[i];
+  const stepsOk = st.asQuestions
+    ? st.steps.every((_,j)=> (t.answers[i+"-"+j]||"").trim().length>0)
+    : st.steps.every((_,j)=> t.checks[i+"-"+j]);
+  const docsOk = !st.docs || st.docs.length===0 || st.docs.every((_,j)=> t.docs[i+"-"+j]);
+  return stepsOk && docsOk;
+}
+
+function renderTenderDetail(){
+  const t = getTender();
+  document.getElementById("app").innerHTML = `
+    <div class="detail-top">
+      <div>
+        <h1>${t.commodity} — ${t.region}</h1>
+        <div class="meta-row"><span><b>${t.id}</b></span><span>${t.value}</span><span>Notified ${t.notified}</span></div>
+      </div>
+    </div>
+    <div class="progress-strip" id="progressStrip"></div>
+    <div class="stage-tabbar">
+      <div class="track-line"></div>
+      <div class="stage-tabs" id="stepper"></div>
+    </div>
+    <main class="stage-content" id="stageDetail"></main>
+  `;
+  renderProgressStrip();
+  renderStepper();
+  renderStageDetail();
+}
+
+function renderProgressStrip(){
+  const t = getTender();
+  const pct = Math.round((Math.min(t.currentIndex,STAGE_COUNT)/STAGE_COUNT)*100);
+  document.getElementById("progressStrip").innerHTML = `
+    <div class="ptext"><b>${t.id}</b> — stage ${Math.min(t.currentIndex+1,STAGE_COUNT)} of ${STAGE_COUNT}</div>
+    <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="pct">${pct}%</div>
+  `;
+}
+
+function renderStepper(){
+  const el = document.getElementById("stepper");
+  el.innerHTML = stageTemplate.map((st,i)=>{
+    const status = stageStatus(i);
+    const tag = status==="done" ? "cleared" : status==="current" ? "in progress" : "pending";
+    return `
+    <div class="step ${status} ${selectedStage===i?'selected':''}" data-idx="${i}" title="${st.title}">
+      <div class="dot">${status==='done'?'✓':String(i+1).padStart(2,'0')}</div>
+      <div class="body">
+        <div class="phase">${st.phase}</div>
+        <span class="status-tag">${tag}</span>
+      </div>
+    </div>`;
+  }).join("");
+  el.querySelectorAll(".step").forEach(n=> n.onclick = ()=>{ selectedStage=parseInt(n.dataset.idx); renderStepperAndDetail(); });
+  const sel = el.querySelector(".step.selected");
+  if(sel) sel.scrollIntoView({behavior:"smooth", inline:"center", block:"nearest"});
+}
+function renderStepperAndDetail(){ renderStepper(); renderStageDetail(); renderProgressStrip(); }
+
+function renderStageDetail(){
+  const i = selectedStage;
+  const st = stageTemplate[i];
+  const status = stageStatus(i);
+  const t = getTender();
+  const el = document.getElementById("stageDetail");
+  const complete = stageComplete(t, i);
+  const isLast = i === STAGE_COUNT-1;
+
+  const docNames = st.docs || [];
+  const docsHtml = docNames.length ? `
+    <div class="section-lbl">Supporting documents</div>
+    <div class="doc-grid">
+      ${docNames.map((d,j)=>{
+        const key = i+"-"+j;
+        const up = t.docs[key];
+        const accept = st.imageDocs ? "image/*,application/pdf" : "*/*";
+        return `<div class="doc-tile ${up?'uploaded':''}">
+          <div class="icon">${up ? (st.imageDocs?'🖼️':'📎') : '📄'}</div>
+          <div class="dname">${d}</div>
+          <div class="dstatus">${up ? up.name : 'Not uploaded'}</div>
+          <div class="doc-btn-row">
+            <input type="file" accept="${accept}" style="display:none" id="file-${key}" data-key="${key}">
+            <button class="cap-btn" data-trigger="${key}">${up ? 'Replace' : (st.imageDocs?'Capture / upload':'Upload')}</button>
+            ${up ? `<button class="rm-btn" data-remove="${key}">✕</button>` : ""}
+          </div>
+        </div>`;
+      }).join("")}
+    </div>` : "";
+
+  let auditHtml = "";
+  if(st.auditTrail){
+    const sections = ["Business Section","Finance Section","IT Section","MD Section"];
+    const passUpto = status==="done" ? 4 : status==="current" ? 2 : 0;
+    auditHtml = `<div class="section-lbl">Audit trail</div>
+    <div class="audit-trail">${sections.map((sec,idx)=>{
+      const cls = idx<passUpto ? "pass" : idx===passUpto ? "active" : "";
+      return `<div class="audit-node ${cls}"><div class="audit-connector"></div>
+        <div class="bubble">${idx<passUpto?'✓':idx+1}</div>
+        <div class="lbl">${sec}</div>
+        <div class="sub">${idx<passUpto?'Cleared':idx===passUpto?'Under review':'Queued'}</div>
+      </div>`;
+    }).join("")}</div>`;
+  }
+
+  const nextLabel = isLast ? "Save and complete tender" : `Save and continue to ${stageTemplate[i+1].phase} \u2192`;
+
+  const checklistHtml = st.asQuestions ? `
+      <div class="section-lbl">Review questions</div>
+      <div class="qa-list">
+        ${st.steps.map((step,j)=>{
+          const val = t.answers[i+"-"+j] || "";
+          return `<div class="qa-item ${val.trim()?'answered':''}">
+            <label class="qa-label">${step.t}</label>
+            ${step.s?`<div class="ci-sub">${step.s}</div>`:""}
+            <textarea class="qa-input" data-ans="${j}" rows="2" placeholder="Type the answer here…">${val}</textarea>
+          </div>`;
+        }).join("")}
+      </div>` : `
+      <div class="section-lbl">Checklist</div>
+      <div class="checklist">
+        ${st.steps.map((step,j)=>{
+          const checked = !!t.checks[i+"-"+j];
+          return `<label class="check-item ${checked?'checked':''}">
+            <input type="checkbox" data-chk="${j}" ${checked?'checked':''}>
+            <div style="flex:1;">
+              <div class="ci-text">${step.t}</div>
+              ${step.s?`<div class="ci-sub">${step.s}</div>`:""}
+            </div>
+          </label>`;
+        }).join("")}
+      </div>`;
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="detail-head">
+        <div>
+          <div class="eyebrow">Stage ${String(i+1).padStart(2,'0')} of ${STAGE_COUNT} · ${st.phase}</div>
+          <h2>${st.title}</h2>
+        </div>
+        <span class="stage-status-pill ${status}">${status==='done'?'Cleared':status==='current'?'In progress':'Pending'}</span>
+      </div>
+      <p class="detail-desc">${st.desc}</p>
+      ${st.note ? `<div class="note ${st.note.type==='alert'?'alert':''}">${st.note.text}</div>` : ""}
+
+      ${checklistHtml}
+
+      ${auditHtml}
+      ${docsHtml}
+
+      <div class="stage-nav-btns">
+        <button class="nav-btn" id="prevStageBtn" ${i===0?'disabled':''}>&larr; Previous stage</button>
+        <div class="nav-right">
+          <span class="gate-hint" style="${complete?'display:none':''}">Complete the ${st.asQuestions?'questions':'checklist'}${docNames.length?' and attach the required documents':''} to continue.</span>
+          <button class="nav-btn" id="saveDraftBtn">Save as Draft</button>
+          <button class="nav-btn primary" id="saveNextBtn" ${complete?'':'disabled'}>${nextLabel}</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  el.querySelectorAll("[data-chk]").forEach(box=>{
+    box.onchange = (e)=>{
+      const j = e.target.dataset.chk;
+      t.checks[i+"-"+j] = e.target.checked ? 1 : 0;
+      renderStepperAndDetail();
+    };
+  });
+  el.querySelectorAll("[data-ans]").forEach(ta=>{
+    ta.oninput = (e)=>{
+      const j = e.target.dataset.ans;
+      t.answers[i+"-"+j] = e.target.value;
+      const nowComplete = stageComplete(t,i);
+      const btn = document.getElementById("saveNextBtn");
+      const hint = el.querySelector(".gate-hint");
+      if(btn) btn.disabled = !nowComplete;
+      if(hint) hint.style.display = nowComplete ? "none" : "";
+      e.target.closest(".qa-item").classList.toggle("answered", e.target.value.trim().length>0);
+    };
+  });
+  el.querySelectorAll("[data-trigger]").forEach(btn=>{
+    btn.onclick = ()=> document.getElementById("file-"+btn.dataset.trigger).click();
+  });
+  el.querySelectorAll("input[type=file][data-key]").forEach(inp=>{
+    inp.onchange = (e)=>{
+      const key = e.target.dataset.key;
+      const file = e.target.files[0];
+      if(file){ t.docs[key] = { name:file.name }; renderStepperAndDetail(); }
+    };
+  });
+  el.querySelectorAll("[data-remove]").forEach(btn=>{
+    btn.onclick = (e)=>{ e.stopPropagation(); delete t.docs[btn.dataset.remove]; renderStepperAndDetail(); };
+  });
+
+  const prevStage = document.getElementById("prevStageBtn");
+  if(prevStage){
+    prevStage.onclick = ()=>{
+      if(i>0){ selectedStage = i-1; renderTenderDetail(); }
+    };
+  }
+  const saveDraft = document.getElementById("saveDraftBtn");
+  if(saveDraft){
+    saveDraft.onclick = ()=>{
+      const original = saveDraft.textContent;
+      saveDraft.textContent = "Draft saved ✓";
+      saveDraft.disabled = true;
+      setTimeout(()=>{ saveDraft.textContent = original; saveDraft.disabled = false; }, 1200);
+    };
+  }
+  const saveNext = document.getElementById("saveNextBtn");
+  if(saveNext){
+    saveNext.onclick = ()=>{
+      if(!stageComplete(t,i)) return;
+      if(isLast){ t.status="Completed"; goDashboard(); return; }
+      t.currentIndex = Math.max(t.currentIndex, i+1);
+      selectedStage = i+1;
+      renderTenderDetail();
+    };
+  }
+}
+
+/* ================= main render dispatch ================= */
+function render(){
+  renderHeader();
+  if(view==="dashboard") renderDashboard();
+  else renderTenderDetail();
+}
+render();
+</script>
+</body>
+</html>
