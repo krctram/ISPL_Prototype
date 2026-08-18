@@ -37,7 +37,65 @@
   .btn-gold{background:var(--gold);color:#fff;border:none;padding:9px 16px;border-radius:7px;font-size:13.5px;font-weight:600;}
   .btn-gold:hover{background:#a3771f;}
 
-  main{max-width:1360px;margin:0 auto;padding:26px 28px 80px;}
+  main{max-width:1200px;margin:0 auto;padding:26px 28px 80px;flex:1;min-width:0;}
+
+  /* -------- app shell / left nav -------- */
+  .app-body{display:flex;align-items:flex-start;}
+  .side-nav{width:214px;flex:none;background:var(--card);border-right:1px solid var(--line);padding:18px 12px;position:sticky;top:var(--header-h,72px);height:calc(100vh - var(--header-h,72px));overflow-y:auto;}
+  .side-nav .nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:8px;font-size:13.8px;font-weight:600;color:var(--slate);cursor:pointer;margin-bottom:3px;transition:background .12s,color .12s;}
+  .side-nav .nav-item .ic{font-size:16px;flex:none;width:18px;text-align:center;}
+  .side-nav .nav-item:hover{background:var(--gold-pale);color:#8f6318;}
+  .side-nav .nav-item.active{background:var(--ink);color:#fff;}
+  .side-nav .nav-section-lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--slate);font-weight:700;padding:10px 13px 6px;}
+
+  @media (max-width:760px){
+    .app-body{flex-direction:column;}
+    .side-nav{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line);display:flex;overflow-x:auto;padding:10px 12px;gap:4px;}
+    .side-nav .nav-section-lbl{display:none;}
+    .side-nav .nav-item{margin-bottom:0;white-space:nowrap;}
+    main{padding:20px 16px 60px;}
+  }
+
+  /* -------- analytics page -------- */
+  .analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:26px;}
+  .kpi-tile{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;}
+  .kpi-tile .kn{font-family:"Fraunces",serif;font-size:27px;font-weight:600;color:var(--ink);}
+  .kpi-tile .kl{font-size:12px;color:var(--slate);margin-top:3px;}
+  .kpi-tile .kd{font-size:11.5px;margin-top:6px;font-weight:600;}
+  .kpi-tile .kd.up{color:var(--green);}
+  .kpi-tile .kd.warn{color:var(--rust);}
+
+  .chart-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px;margin-bottom:16px;}
+  .chart-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;}
+  .chart-card h3{font-size:15.5px;margin-bottom:2px;}
+  .chart-card .chart-sub{font-size:12px;color:var(--slate);margin-bottom:16px;}
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .bar-row .blbl{width:150px;flex:none;font-size:12.5px;color:var(--ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .bar-track{flex:1;height:16px;border-radius:4px;background:var(--gold-pale);overflow:hidden;}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),#8f6318);border-radius:4px;}
+  .bar-fill.green{background:linear-gradient(90deg,var(--green),#2d5f40);}
+  .bar-fill.rust{background:linear-gradient(90deg,var(--rust),#8a3a29);}
+  .bar-val{width:38px;flex:none;text-align:right;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--slate);}
+  .donut-wrap{display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+  .donut-legend{display:flex;flex-direction:column;gap:8px;}
+  .donut-legend .li{display:flex;align-items:center;gap:8px;font-size:12.8px;color:var(--ink);}
+  .donut-legend .sw{width:10px;height:10px;border-radius:3px;flex:none;}
+
+  /* -------- admin pages -------- */
+  .admin-add-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .admin-add-row input{padding:9px 12px;border:1px solid var(--line-strong);border-radius:7px;font-size:13px;font-family:inherit;}
+  .admin-add-row input.aname{flex:1;min-width:200px;}
+  .admin-add-row input.arole{flex:1;min-width:160px;}
+  .admin-add-row button{border:1px dashed var(--gold);background:var(--gold-pale);color:#8f6318;font-size:13px;font-weight:600;padding:9px 14px;border-radius:7px;flex:none;}
+  .admin-list{display:flex;flex-direction:column;gap:8px;}
+  .admin-row{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);padding:11px 14px;}
+  .admin-row .aidx{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--slate);width:20px;flex:none;}
+  .admin-row input{flex:1;min-width:0;padding:7px 10px;border:1px solid var(--line-strong);border-radius:6px;font-size:13px;font-family:inherit;}
+  .admin-row .order-btns{display:flex;flex-direction:column;gap:2px;flex:none;}
+  .admin-row .order-btns button{border:1px solid var(--line-strong);background:#fff;color:var(--slate);width:22px;height:18px;line-height:1;font-size:10px;border-radius:4px;padding:0;}
+  .admin-row .order-btns button:disabled{opacity:.3;}
+  .admin-row .rm-admin{flex:none;border:1px solid var(--rust-pale);background:#fff;color:var(--rust);font-size:11.5px;font-weight:600;padding:6px 10px;border-radius:6px;}
+  .admin-note{font-size:12.5px;color:var(--slate);margin-bottom:16px;background:var(--gold-pale);border-radius:8px;padding:11px 14px;}
 
   /* -------- dashboard -------- */
   .dash-toolbar{display:flex;gap:12px;align-items:center;margin-bottom:20px;flex-wrap:wrap;}
@@ -172,6 +230,137 @@
   .audit-connector{position:absolute;top:20px;left:-50%;width:100%;height:2px;background:var(--line-strong);z-index:0;}
   .audit-node:first-child .audit-connector{display:none;}
   .audit-node.pass .audit-connector{background:var(--green);}
+  .audit-flag-btn{margin-top:14px;font-size:12px;font-weight:600;color:var(--rust);background:#fff;border:1px solid var(--rust-pale);padding:6px 12px;border-radius:6px;}
+
+  /* -------- truck registry (Supply, Dispatch & Delivery stage) -------- */
+  .truck-summary-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .truck-summary-strip .pill{background:#FDFCF9;border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-size:12.5px;color:var(--slate);}
+  .truck-summary-strip .pill b{color:var(--ink);font-family:"IBM Plex Mono",monospace;}
+  .add-truck-btn{border:1px dashed var(--gold);background:var(--gold-pale);color:#8f6318;font-size:13px;font-weight:600;padding:10px 16px;border-radius:8px;width:100%;margin-bottom:14px;}
+  .truck-list{display:flex;flex-direction:column;gap:10px;}
+  .truck-card{border:1px solid var(--line);border-radius:8px;background:#FDFCF9;overflow:hidden;}
+  .truck-card.complete{border-color:#c4dccb;}
+  .truck-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;}
+  .truck-head .tid{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;color:var(--ink);flex:none;}
+  .truck-head .tprog{flex:1;font-size:12px;color:var(--slate);}
+  .truck-head .tstatus{flex:none;font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px;background:#EFEBE0;color:var(--slate);font-family:"IBM Plex Mono",monospace;}
+  .truck-card.complete .tstatus{background:var(--green-pale);color:var(--green);}
+  .truck-head .caret{flex:none;color:var(--slate);font-size:12px;transition:transform .15s;}
+  .truck-card.open .caret{transform:rotate(90deg);}
+  .truck-head .rm-truck{flex:none;border:1px solid var(--rust-pale);background:#fff;color:var(--rust);font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:6px;}
+  .truck-body{display:none;padding:4px 16px 16px;border-top:1px solid var(--line);}
+  .truck-card.open .truck-body{display:block;}
+  .truck-doc-group{margin-top:12px;}
+  .truck-doc-group .glbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--slate);font-weight:600;margin-bottom:8px;}
+  .truck-doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+  .truck-doc-tile{border:1.5px dashed var(--line-strong);border-radius:7px;padding:10px 10px;text-align:center;background:#fff;}
+  .truck-doc-tile.uploaded{border-style:solid;border-color:#c4dccb;background:var(--green-pale);}
+  .truck-doc-tile .dname{font-size:11.8px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .truck-doc-tile .dstatus{font-size:10.8px;color:var(--slate);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .truck-doc-tile.uploaded .dstatus{color:var(--green);}
+  .truck-doc-tile .cap-btn{font-size:11px;padding:5px 8px;}
+
+  /* -------- region-wise allocation (Supply, Dispatch & Delivery stage) -------- */
+  .region-add-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  .region-add-row input{padding:9px 12px;border:1px solid var(--line-strong);border-radius:7px;font-size:13px;font-family:inherit;}
+  .region-add-row input.rname{flex:1;min-width:160px;}
+  .region-add-row input.rtons{width:110px;}
+  .region-add-row button{border:1px dashed var(--gold);background:var(--gold-pale);color:#8f6318;font-size:13px;font-weight:600;padding:9px 14px;border-radius:7px;}
+  .region-add-hint{font-size:11.5px;color:var(--slate);margin:-8px 0 14px;}
+  .region-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+  .region-card{border:1px solid var(--line);border-radius:8px;background:#FDFCF9;padding:14px 16px;}
+  .region-card.complete{border-color:#c4dccb;}
+  .region-card.certified{border-color:#c4dccb;background:var(--green-pale);}
+  .region-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+  .region-head input.rname-edit{font-family:"Fraunces",serif;font-size:14.5px;font-weight:600;border:none;background:transparent;color:var(--ink);flex:1;min-width:140px;padding:2px 0;}
+  .region-head input.rname-edit:focus{outline:none;border-bottom:1px solid var(--gold);}
+  .region-head .rname-static{font-family:"Fraunces",serif;font-size:14.5px;font-weight:600;color:var(--ink);flex:1;min-width:140px;}
+  .region-tag{font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:10px;font-family:"IBM Plex Mono",monospace;flex:none;}
+  .region-tag.active{background:var(--gold-soft);color:#8f6318;}
+  .region-tag.pending{background:#EFEBE0;color:var(--slate);}
+  .region-tag.supplied{background:var(--green-pale);color:var(--green);}
+  .region-tag.certified{background:var(--ink);color:#fff;}
+  .region-tons-row{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--slate);margin-bottom:8px;flex-wrap:wrap;}
+  .region-tons-row input.rtons-edit{width:80px;padding:5px 8px;border:1px solid var(--line-strong);border-radius:6px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;}
+  .region-track{height:6px;border-radius:4px;background:var(--gold-pale);overflow:hidden;margin-bottom:10px;}
+  .region-fill{height:100%;background:linear-gradient(90deg,var(--gold),#8f6318);}
+  .region-fill.supplied{background:linear-gradient(90deg,var(--green),#2d5f40);}
+  .region-cert-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .region-cert-status{font-size:12px;color:var(--slate);}
+  .cert-btn{border:1px solid var(--gold);background:var(--gold-pale);color:#8f6318;font-size:12px;font-weight:600;padding:7px 12px;border-radius:6px;}
+  .cert-btn.recv{border-color:#9dc4ab;background:var(--green);color:#fff;}
+  .rm-region{margin-left:auto;flex:none;border:1px solid var(--rust-pale);background:#fff;color:var(--rust);font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:6px;}
+
+  .truck-region-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px;}
+  .truck-region-row select, .truck-region-row input{padding:6px 9px;border:1px solid var(--line-strong);border-radius:6px;font-size:12px;font-family:inherit;}
+  .truck-region-row input.tons-edit{width:70px;font-family:"IBM Plex Mono",monospace;}
+  .truck-region-row label{font-size:11px;color:var(--slate);font-weight:600;}
+
+  .lorry-details{margin-bottom:14px;}
+  .lorry-details .glbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--slate);font-weight:600;margin-bottom:8px;}
+  .lorry-details-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:10px;}
+  .lorry-field label{font-size:10.5px;color:var(--slate);font-weight:600;display:block;margin-bottom:4px;}
+  .lorry-field input{width:100%;padding:7px 9px;border:1px solid var(--line-strong);border-radius:6px;font-size:12.5px;font-family:inherit;}
+  .lorry-route{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:7px;padding:10px 12px;}
+  .lorry-route .lorry-field{flex:1;min-width:140px;}
+  .lorry-route .route-arrow{color:var(--gold);font-size:16px;flex:none;margin-top:14px;}
+
+  .variance-block{margin-top:12px;border:1px solid var(--line);border-radius:7px;padding:12px 14px;background:#fff;}
+  .variance-block .glbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--slate);font-weight:600;margin-bottom:8px;}
+  .variance-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+  .variance-row select, .variance-row input{padding:7px 10px;border:1px solid var(--line-strong);border-radius:6px;font-size:12.5px;font-family:inherit;}
+  .variance-row input.vqty{width:100px;}
+  .variance-block textarea{width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font-family:inherit;font-size:12.5px;resize:vertical;}
+  .variance-badge{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:10px;font-family:"IBM Plex Mono",monospace;margin-left:8px;}
+  .variance-badge.none{background:var(--green-pale);color:var(--green);}
+  .variance-badge.shortage,.variance-badge.damage{background:var(--rust-pale);color:var(--rust);}
+  .variance-badge.overage{background:var(--gold-soft);color:#8f6318;}
+
+  /* -------- multi-bill billing & payment stage -------- */
+  .bill-add-btn{border:1px dashed var(--gold);background:var(--gold-pale);color:#8f6318;font-size:13px;font-weight:600;padding:10px 16px;border-radius:8px;width:100%;margin-bottom:14px;}
+  .bill-list{display:flex;flex-direction:column;gap:16px;}
+  .bill-card{border:1px solid var(--line);border-radius:8px;background:#FDFCF9;padding:16px;}
+  .bill-card.cleared{border-color:#c4dccb;}
+  .bill-card.restarted{border-color:var(--rust-pale);}
+  .bill-card.rejected{border-color:var(--rust);}
+  .bregions{font-size:11.5px;color:var(--gold);font-weight:600;margin-top:4px;}
+  .bill-region-block{margin:12px 0;}
+  .bill-region-block .glbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--slate);font-weight:600;margin-bottom:8px;}
+  .bill-region-chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .bill-region-chip{display:flex;align-items:center;gap:6px;border:1px solid var(--line-strong);background:#fff;padding:6px 12px;border-radius:16px;font-size:12px;font-weight:600;color:var(--slate);cursor:pointer;}
+  .bill-region-chip input{accent-color:var(--gold);}
+  .bill-region-chip.checked{background:var(--gold-pale);border-color:var(--gold);color:#8f6318;}
+  .bill-region-empty{font-size:12.5px;color:var(--slate);font-style:italic;}
+  .bill-doc-row{margin:12px 0;}
+  .bill-doc-tile{border:1.5px dashed var(--line-strong);border-radius:8px;padding:12px 14px;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .bill-doc-tile.uploaded{border-style:solid;border-color:#c4dccb;background:var(--green-pale);}
+  .bill-doc-tile .dname{font-size:13px;font-weight:600;color:var(--ink);}
+  .bill-doc-tile .dstatus{font-size:12px;color:var(--slate);}
+  .bill-doc-tile.uploaded .dstatus{color:var(--green);}
+  .approval-panel{margin-top:14px;border:1px solid var(--line);border-radius:8px;padding:14px 16px;background:#fff;}
+  .approval-lbl{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;}
+  .approval-actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .approve-btn{border:1px solid var(--green);background:var(--green-pale);color:var(--green);font-size:12.5px;font-weight:600;padding:9px 14px;border-radius:7px;}
+  .approve-btn:hover{background:var(--green);color:#fff;}
+  .reject-btn{border:1px solid var(--rust);background:var(--rust-pale);color:var(--rust);font-size:12.5px;font-weight:600;padding:9px 14px;border-radius:7px;}
+  .reject-btn:hover{background:var(--rust);color:#fff;}
+  .reject-form{margin-top:4px;}
+  .reject-form label{font-size:11.5px;font-weight:600;color:var(--slate);display:block;margin-bottom:6px;}
+  .reject-form textarea{width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:9px 11px;font-family:inherit;font-size:12.8px;resize:vertical;margin-bottom:10px;}
+  .approve-form{margin-top:4px;}
+  .approve-form label{font-size:11.5px;font-weight:600;color:var(--slate);display:block;margin-bottom:6px;}
+  .approve-form textarea{width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:9px 11px;font-family:inherit;font-size:12.8px;resize:vertical;margin-bottom:10px;}
+  .approval-log{margin-top:14px;border-left:3px solid var(--green);background:var(--green-pale);border-radius:0 6px 6px 0;padding:10px 14px;}
+  .approval-log .glbl{color:var(--green);margin-bottom:6px;}
+  .approval-log-item{font-size:12.5px;color:#2d5f40;margin-bottom:4px;}
+  .approval-log-item:last-child{margin-bottom:0;}
+  .alog-role{color:var(--slate);font-weight:400;}
+  .bill-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:6px;}
+  .bill-head .bid{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;color:var(--ink);}
+  .bill-head .bperiod{font-size:12px;color:var(--slate);margin-top:2px;}
+  .bill-head .bvalue{font-size:13.5px;font-weight:600;color:var(--ink);font-family:"IBM Plex Mono",monospace;}
+  .bill-flag-note{font-size:12px;color:var(--rust);margin:6px 0 0;}
+  .restart-badge{font-size:11px;font-weight:600;background:var(--rust-pale);color:var(--rust);padding:3px 9px;border-radius:10px;font-family:"IBM Plex Mono",monospace;}
 
   .stage-nav-btns{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:14px;flex-wrap:wrap;}
   .nav-btn{background:var(--card);border:1px solid var(--line-strong);color:var(--ink);padding:9px 18px;border-radius:7px;font-size:13.5px;font-weight:600;}
@@ -208,7 +397,10 @@
   </div>
 </header>
 
-<main id="app"></main>
+<div class="app-body">
+  <nav class="side-nav" id="sideNav"></nav>
+  <main id="app"></main>
+</div>
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
@@ -263,12 +455,12 @@ const stageTemplate = [
     docs:["Technical Evaluation Result","Letter of Acceptance"] },
 
   { phase:"Allocation Stage", title:"Region-wise Allocation",
-    desc:"TNCSC issues the sub-allotment letter for the region and the award is recorded as a Sale Order in the ERP.",
+    desc:"TNCSC issues the sub-allotment letter for the region and the award is recorded as a Sale Order in the ERP. The region-wise tonnage allocation set up here — e.g. Chennai North \u2192 Amanda Nagar, 100 tons — is the master list carried forward: the Supply, Dispatch & Delivery stage tracks deliveries against it, and the Completion Stage tracks its completion certificates against it. It isn't redefined in either place. Since the sub-allotment letter itself is issued region-wise, each region carries its own copy here rather than one shared upload.",
     steps:[
       {t:"Sub-allotment letter issued region-wise by TNCSC"},
       {t:"Recorded as a Sale Order in ERP"},
     ],
-    docs:["Sub-allotment Letter"] },
+    regionAllocStage:true },
 
   { phase:"Security & Agreement Stage", title:"Security Deposit & Agreement Execution",
     desc:"Formalising the award with a bank guarantee and signed agreement, while the original EMD works its way back.",
@@ -279,39 +471,31 @@ const stageTemplate = [
     ],
     docs:["Bank Guarantee","Signed Agreement"] },
 
-  { phase:"Supply & Dispatch Stage", title:"Supply Commencement & Dispatch",
-    desc:"Physical movement begins — supply against the agreed schedule, cargo out to the allotted depots.",
+  { phase:"Supply, Dispatch & Delivery Stage", title:"Truck-wise Dispatch & Delivery Capture",
+    desc:"A sub-allotment (one spell) is discharged truck by truck, not as one lump movement — a 6,000-tonne spell at ~30 tonnes a load works out to roughly 200 lorries, and one dispatch invoice equals one lorry. Every lorry is tracked here as its own record, from the moment it's dispatched from the depot to the moment it's delivered and receipted at the destination godown. The spell's tonnage is itself allocated region by region (e.g. Chennai North \u2192 Amanda Nagar) — as each region's allocated tonnage is fully delivered it ticks off and the next region becomes active, and a region-wise completion certificate is requested from ECN for it well before the spell reaches billing. The certificate itself is only confirmed as received later, in the Completion Stage.",
     steps:[
       {t:"Supply commenced as per schedule"},
-      {t:"Cargo dispatched to designated depots with invoice"},
+      {t:"Cargo dispatched to designated depots with invoice", s:"Add each lorry below as it goes out — dispatch docs first, delivery docs once it's unloaded."},
     ],
-    docs:["Dispatch Invoice"] },
-
-  { phase:"Delivery & Documentation Stage", title:"Godown Delivery & Document Capture",
-    desc:"Once the truck unloads at the destination godown, four documents are collected before billing can start — this is the stage the whole billing chain depends on.",
-    steps:[
-      {t:"Acknowledgement of receipt from depot authorities"},
-      {t:"Weighment slip obtained"},
-      {t:"Quality certificate obtained"},
-      {t:"Stock certificate obtained"},
-    ],
-    docs:["Acknowledgement","Weighment Slip","Quality Certificate","Stock Certificate"],
+    truckStage:true,
+    dispatchDocs:["Dispatch Invoice","Packing Slip"],
+    deliveryDocs:["Acknowledgement","Weighment Slip","Quality Certificate","JSN / Delivery Documentation","Stock Certificate","Delivery Invoice Receipt","Net Stock Certificate"],
     imageDocs:true,
-    note:{type:"alert", text:"Billing is generated directly off these four documents — a gap or a blurry scan here stalls the bill, not just the record."} },
+    note:{type:"alert", text:"Billing is generated directly off each lorry's delivery documents — a missing or blurry scan on even one truck stalls that truck's line in the bill, not just the record. Once the Acknowledgement is captured, any shortage, overage, or damage against the invoiced quantity must be recorded against that lorry — it's what the region's net delivered tonnage and completion certificate request are based on."} },
 
   { phase:"Billing & Payment Stage", title:"Invoice Consolidation & Multi-level Audit",
-    desc:"Multiple invoices roll up into a single bill submitted to TNCSC, then move through four audit sections before 95% of funds release, subject to availability.",
+    desc:"Lorry invoices don't wait for the full spell to close — with a single 30-tonne lorry of pulses worth roughly ₹36 lakh at current rates, and around 700 lorries moving in a month for one commodity, the working-capital gap is too large to fund on one final bill. Bills are raised weekly, bi-weekly, or every couple of days instead, each one consolidating whatever invoices are ready and moving independently through the audit chain before TNCSC releases funds.",
     steps:[
-      {t:"Invoices consolidated into a single bill"},
+      {t:"Invoices consolidated into a bill for the period"},
       {t:"Bill submitted to TNCSC with supporting documents"},
     ],
-    docs:["Consolidated Bill"],
-    auditTrail:true },
+    billStage:true,
+    note:{type:"alert", text:"This prototype models 4 sections end to end, but a real bill can pass through 15–25 sections — each one a role-based sign-off. A single error anywhere in the chain, even a spelling mistake near the end, sends the bill all the way back to the Business Section to start over. Audits typically take 15–20 days before funds land, so that turnaround is the reason bills are staggered rather than batched."} },
 
   { phase:"Completion Stage", title:"Region-wise Completion Certificate",
-    desc:"Once a spell's supply is fully discharged, the region-wise completion certificate unlocks the two release stages that follow.",
+    desc:"Once a spell's supply is fully discharged, the region-wise completion certificate requested from ECN back in the Supply stage is confirmed as received here, region by region — each with its own certificate document. This is what unlocks the two release stages that follow.",
     steps:[{t:"Apply for region-wise completion certificate"}],
-    docs:["Completion Certificate"] },
+    regionCertStage:true },
 
   { phase:"Retention Money Release", title:"5% Retention Release",
     desc:"With the completion certificate in hand, the retained 5% can be requested back.",
@@ -329,6 +513,33 @@ const stageTemplate = [
     docs:["Tender Completion Certificate"] },
 ];
 const STAGE_COUNT = stageTemplate.length;
+const TRUCK_STAGE_INDEX = stageTemplate.findIndex(s=>s.truckStage);
+const BILL_STAGE_INDEX = stageTemplate.findIndex(s=>s.billStage);
+
+/* ================= admin-configurable master data ================= */
+// Billing & Payment audit chain — editable from Admin > Section / Approval Config.
+// Order matters: index 0 is where a rejected bill restarts from.
+let billSectionsConfig = [
+  {name:"Business Section", role:"S. Ramesh"},
+  {name:"Finance Section", role:"K. Priya"},
+  {name:"IT Section", role:"A. Suresh"},
+  {name:"MD Section", role:"Dr. N. Elango"},
+];
+function billSections(){
+  return billSectionsConfig;
+}
+
+// Master list of regions/godowns TNCSC operates across — editable from Admin > Region Config.
+// This is what populates the region picker when a tender allocates tonnage in the Allocation Stage.
+let regionMasterConfig = [
+  "Chennai North — Amanda Nagar",
+  "Chennai South — Pusaripalayam",
+  "Trichy Town",
+  "Madurai East",
+  "Tirunelveli Rural",
+  "Salem Town",
+  "Coimbatore North",
+];
 
 /* ================= seed data ================= */
 function makeProgress(currentIndex, checkedStages, docStages){
@@ -343,41 +554,153 @@ function makeProgress(currentIndex, checkedStages, docStages){
 }
 function seq(n){ return Array.from({length:n}, (_,i)=>i); }
 
+// completeCount lorries get every dispatch+delivery doc filled; remainder (up to total) get dispatch docs only (in transit)
+// regionPlan (optional) assigns lorries to regions round-robin: [{region: idx, tons: n}, ...] or a flat tons number applied to all
+function makeTrucks(total, completeCount, regionPlan, depot){
+  const st = stageTemplate[TRUCK_STAGE_INDEX];
+  return Array.from({length:total}, (_,i)=>{
+    const dispatchDocs = {}; st.dispatchDocs.forEach((_,j)=> dispatchDocs[j] = {name:"lorry"+(i+1)+"_dispatch_"+(j+1)+".pdf"});
+    const deliveryDocs = {};
+    if(i < completeCount){ st.deliveryDocs.forEach((_,j)=> deliveryDocs[j] = {name:"lorry"+(i+1)+"_delivery_"+(j+1)+".jpg"}); }
+    const plan = regionPlan ? regionPlan[i % regionPlan.length] : null;
+    return {
+      id:"LRY-"+String(i+1).padStart(3,'0'), dispatchDocs, deliveryDocs,
+      region: plan ? plan.region : null,
+      tons: plan ? plan.tons : 30,
+      variance: i < completeCount ? { type:"none", qty:0, notes:"" } : null,
+      vehicleNo: "TN "+(29+(i%9))+" "+String.fromCharCode(65+(i%5))+String.fromCharCode(66+(i%4))+" "+(1000+i*137)%9999,
+      driverName: "", driverPhone: "",
+      source: depot || "", destination: "",
+      dispatchDate: "",
+    };
+  });
+}
+
+// Region-wise allocation for a spell, e.g. makeRegions([{name:"Chennai North \u2014 Amanda Nagar", tons:100}, ...])
+function makeRegions(specs){
+  return specs.map(r=>({ name:r.name, allocatedTons:r.tons, subAllotmentDoc:null, cert:{status:"pending", doc:null} }));
+}
+
+// clearedCount bills fully pass all sections; if partialSection is set, one extra bill sits mid-chain at that section index;
+// rejectedDemo adds one more bill that was sent back by a section and needs the invoice document resubmitted;
+// defaultRegions (array of region indices) is applied to every generated bill as the region(s) it covers
+function makeBills(clearedCount, partialSection, rejectedDemo, defaultRegions){
+  const sections = billSections();
+  const sampleComments = [
+    "Verified against dispatch invoices and weighment slips — figures tally.",
+    "Funds availability confirmed, ledger entries reconciled.",
+    "System validation passed — no duplicate or mismatched entries.",
+    "Reviewed and signed off for release.",
+  ];
+  const bills = Array.from({length:clearedCount}, (_,i)=>({
+    id:"BILL-"+String(i+1).padStart(3,'0'), period:"Week "+(i+1), value:"₹"+(28+i*4)+"." + (i%2===0?"6":"2") +"L",
+    doc:{name:"bill_"+(i+1)+"_invoice.pdf"}, passUpto: sections.length, restartCount:0, rejection:null,
+    regions: defaultRegions ? [...defaultRegions] : [],
+    approvals: sections.map((sec,si)=>({ sectionIdx:si, sectionName:sec.name, role:sec.role, comment: sampleComments[si % sampleComments.length] }))
+  }));
+  if(typeof partialSection === "number"){
+    bills.push({ id:"BILL-"+String(clearedCount+1).padStart(3,'0'), period:"Week "+(clearedCount+1), value:"₹31.4L",
+      doc:{name:"bill_"+(clearedCount+1)+"_invoice.pdf"}, passUpto: partialSection, restartCount:0, rejection:null,
+      regions: defaultRegions ? [...defaultRegions] : [],
+      approvals: sections.slice(0, partialSection).map((sec,si)=>({ sectionIdx:si, sectionName:sec.name, role:sec.role, comment: sampleComments[si % sampleComments.length] })) });
+  }
+  if(rejectedDemo){
+    const n = bills.length+1;
+    bills.push({ id:"BILL-"+String(n).padStart(3,'0'), period:"Week "+n, value:"₹29.8L",
+      doc:null, passUpto:0, restartCount:1,
+      rejection:{ sectionIdx:1, sectionName:sections[1].name, reason:"Bill value doesn't tally with the dispatch invoice totals for this period — please recheck the lorry-wise figures and resubmit." },
+      regions: defaultRegions ? [...defaultRegions] : [], approvals:[] });
+  }
+  return bills;
+}
+
 let tenders = [
   { id:"TN/CS/2026/014", commodity:"Rice (PDS)", region:"Coimbatore", value:"₹4.8Cr", notified:"02 Jun 2026", status:"Active",
-    ...makeProgress(7, seq(7), seq(7)) },
+    ...makeProgress(6, seq(6), seq(6)),
+    regions: (()=>{ const r = makeRegions([{name:"Chennai North — Amanda Nagar", tons:60},{name:"Chennai South — Pusaripalayam", tons:60}]); r[0].subAllotmentDoc={name:"chennai_north_suballotment.pdf"}; r[1].subAllotmentDoc={name:"chennai_south_suballotment.pdf"}; r[0].cert.status="received"; r[0].cert.doc={name:"chennai_north_completion_cert.pdf"}; r[1].cert.status="requested"; return r; })(),
+    trucks: makeTrucks(4,4,[{region:0,tons:30},{region:0,tons:30},{region:1,tons:30},{region:1,tons:30}]),
+    bills: (()=>{ const b = makeBills(1,2); b[0].regions=[0]; b[1].regions=[0,1]; return b; })() },
   { id:"TN/CS/2026/009", commodity:"Wheat Flour", region:"Trichy", value:"₹2.1Cr", notified:"18 May 2026", status:"Active",
-    ...makeProgress(5, seq(5), seq(5)) },
+    ...makeProgress(5, seq(5), seq(5)),
+    regions: (()=>{ const r = makeRegions([{name:"Trichy Town", tons:90}]); r[0].subAllotmentDoc={name:"trichy_town_suballotment.pdf"}; return r; })(),
+    trucks: makeTrucks(3,2,[{region:0,tons:30}]),
+    bills: [] },
   { id:"TN/CS/2025/077", commodity:"Toor Dal", region:"Madurai", value:"₹1.6Cr", notified:"09 Nov 2025", status:"Completed",
-    ...makeProgress(12, seq(12), seq(12)) },
+    ...makeProgress(11, seq(11), seq(11)),
+    regions: (()=>{ const r = makeRegions([{name:"Madurai East", tons:150}]); r[0].subAllotmentDoc={name:"madurai_east_suballotment.pdf"}; r[0].cert.status="received"; r[0].cert.doc={name:"madurai_east_completion_cert.pdf"}; return r; })(),
+    trucks: makeTrucks(5,5,[{region:0,tons:30}]),
+    bills: makeBills(3, undefined, false, [0]) },
   { id:"TN/CS/2026/021", commodity:"Sugar", region:"Salem", value:"₹3.3Cr", notified:"27 Jun 2026", status:"Active",
-    ...makeProgress(0, [], []) },
+    ...makeProgress(0, [], []), regions: [], trucks: [], bills: [] },
   { id:"TN/CS/2025/061", commodity:"Palm Oil", region:"Chennai", value:"₹5.0Cr", notified:"14 Oct 2025", status:"Active",
-    ...makeProgress(10, seq(10), seq(10)) },
+    ...makeProgress(9, seq(9), seq(9)),
+    regions: (()=>{ const r = makeRegions([{name:"Chennai North — Amanda Nagar", tons:120}]); r[0].subAllotmentDoc={name:"chennai_north_suballotment.pdf"}; r[0].cert.status="requested"; return r; })(),
+    trucks: makeTrucks(4,4,[{region:0,tons:30}]),
+    bills: makeBills(2, undefined, true, [0]) },
   { id:"TN/CS/2025/048", commodity:"Rice (PDS)", region:"Tirunelveli", value:"₹4.2Cr", notified:"22 Aug 2025", status:"Completed",
-    ...makeProgress(12, seq(12), seq(12)) },
+    ...makeProgress(11, seq(11), seq(11)),
+    regions: (()=>{ const r = makeRegions([{name:"Tirunelveli Rural", tons:180}]); r[0].subAllotmentDoc={name:"tirunelveli_rural_suballotment.pdf"}; r[0].cert.status="received"; r[0].cert.doc={name:"tirunelveli_rural_completion_cert.pdf"}; return r; })(),
+    trucks: makeTrucks(6,6,[{region:0,tons:30}]),
+    bills: makeBills(4, undefined, false, [0]) },
 ];
 
 /* ================= app state / router ================= */
-let view = "dashboard";          // "dashboard" | "tender"
+let view = "analytics";          // "dashboard" | "tender" | "analytics" | "admin"
+let adminTab = "region";         // "region" | "sections" — which Admin sub-page is open
 let currentTenderId = null;
 let selectedStage = 0;
 let search = "";
 let statusFilter = "All";
+let openTruckIdx = null;
+let openRejectBillIdx = null;
 
 function getTender(){ return tenders.find(t=>t.id===currentTenderId); }
 function tenderProgress(t){ return Math.round((Math.min(t.currentIndex,STAGE_COUNT)/STAGE_COUNT)*100); }
+function goAnalytics(){ view="analytics"; currentTenderId=null; render(); }
 function goDashboard(){ view="dashboard"; currentTenderId=null; render(); }
+function goAdmin(tab){ view="admin"; adminTab=tab; currentTenderId=null; render(); }
 function openTender(id){ view="tender"; currentTenderId=id; selectedStage=0; render(); }
+
+/* ================= render: left nav ================= */
+function renderSideNav(){
+  const el = document.getElementById("sideNav");
+  const isAdmin = view==="admin";
+  el.innerHTML = `
+    <div class="nav-item ${view==='analytics'?'active':''}" data-nav="analytics"><span class="ic">&#128202;</span>Analytics</div>
+    <div class="nav-item ${view==='dashboard'||view==='tender'?'active':''}" data-nav="dashboard"><span class="ic">&#9635;</span>Tenders</div>
+    <div class="nav-section-lbl">Admin</div>
+    <div class="nav-item ${isAdmin&&adminTab==='region'?'active':''}" data-nav="admin-region"><span class="ic">&#128205;</span>Region Config</div>
+    <div class="nav-item ${isAdmin&&adminTab==='sections'?'active':''}" data-nav="admin-sections"><span class="ic">&#9878;&#65039;</span>Section / Approval Config</div>
+  `;
+  el.querySelectorAll("[data-nav]").forEach(n=>{
+    n.onclick = ()=>{
+      const key = n.dataset.nav;
+      if(key==="analytics") goAnalytics();
+      else if(key==="dashboard") goDashboard();
+      else if(key==="admin-region") goAdmin("region");
+      else if(key==="admin-sections") goAdmin("sections");
+    };
+  });
+}
+// header height varies slightly with content, so pin the sticky side-nav offset to the real measured height
+function syncHeaderHeight(){
+  const h = document.querySelector("header.top").offsetHeight;
+  document.documentElement.style.setProperty("--header-h", h+"px");
+}
+window.addEventListener("resize", syncHeaderHeight);
 
 /* ================= render: header ================= */
 function renderHeader(){
-  document.getElementById("headerName").textContent = view==="dashboard" ? "Tender Supply Tracker" : getTender().id;
-  document.getElementById("headerSub").textContent = view==="dashboard" ? "Tamil Nadu Civil Supplies Corporation" : getTender().commodity+" · "+getTender().region;
+  const adminTitle = adminTab==="region" ? "Region Config" : "Section / Approval Config";
+  const adminSub = adminTab==="region" ? "Master region list used across the Allocation Stage" : "The Billing & Payment audit chain, in order";
+  document.getElementById("headerName").textContent = view==="dashboard" ? "Tender Supply Tracker" : view==="analytics" ? "Analytics" : view==="admin" ? adminTitle : getTender().id;
+  document.getElementById("headerSub").textContent = view==="dashboard" ? "Tamil Nadu Civil Supplies Corporation" : view==="analytics" ? "Portfolio-wide performance across all tenders" : view==="admin" ? adminSub : getTender().commodity+" · "+getTender().region;
   const actions = document.getElementById("topActions");
   if(view==="dashboard"){
     actions.innerHTML = `<button class="btn-gold" id="newTenderBtn">+ New tender</button>`;
     document.getElementById("newTenderBtn").onclick = ()=> document.getElementById("modalOverlay").classList.add("open");
+  } else if(view==="analytics" || view==="admin"){
+    actions.innerHTML = "";
   } else {
     actions.innerHTML = `<button class="back-btn" id="backBtn">&larr; All tenders</button>`;
     document.getElementById("backBtn").onclick = goDashboard;
@@ -393,17 +716,7 @@ function renderDashboard(){
     return matchesSearch && matchesStatus;
   });
 
-  const activeCount = tenders.filter(t=>t.status==="Active").length;
-  const completedCount = tenders.filter(t=>t.status==="Completed").length;
-  const avgProgress = Math.round(tenders.reduce((a,t)=>a+tenderProgress(t),0)/tenders.length);
-
   document.getElementById("app").innerHTML = `
-    <div class="stat-strip">
-      <div class="stat-mini"><div class="n">${tenders.length}</div><div class="l">Total tenders</div></div>
-      <div class="stat-mini"><div class="n">${activeCount}</div><div class="l">Active</div></div>
-      <div class="stat-mini"><div class="n">${completedCount}</div><div class="l">Completed</div></div>
-      <div class="stat-mini"><div class="n">${avgProgress}%</div><div class="l">Average progress</div></div>
-    </div>
     <div class="dash-toolbar">
       <div class="search-box"><span class="ic">&#128269;</span><input id="searchInput" placeholder="Search by tender ID, commodity or region" value="${search}"></div>
       <button class="filter-chip ${statusFilter==='All'?'active':''}" data-f="All">All</button>
@@ -447,13 +760,204 @@ function renderTenderCard(t){
   </div>`;
 }
 
+/* ================= render: analytics ================= */
+function renderAnalytics(){
+  const parseCr = (v)=>{ const m = v.match(/₹([\d.]+)Cr/); return m ? parseFloat(m[1]) : 0; };
+  const totalValue = tenders.reduce((s,t)=> s+parseCr(t.value), 0);
+  const activeCount = tenders.filter(t=>t.status==="Active").length;
+  const completedCount = tenders.filter(t=>t.status==="Completed").length;
+  const avgProgress = tenders.length ? Math.round(tenders.reduce((a,t)=>a+tenderProgress(t),0)/tenders.length) : 0;
+
+  const allRegions = tenders.flatMap(t=>t.regions||[]);
+  const certCounts = { pending:0, requested:0, received:0 };
+  allRegions.forEach(r=> certCounts[r.cert.status]++);
+
+  const sections = billSections();
+  const allBills = tenders.flatMap(t=>t.bills||[]);
+  const billRejected = allBills.filter(b=> b.rejection).length;
+
+  const donutGradient = (parts)=>{ // parts: [{value,color}]
+    const total = Math.max(1, parts.reduce((s,p)=>s+p.value,0));
+    let acc = 0;
+    return parts.map(p=>{
+      const start = acc/total*360; acc += p.value;
+      const end = acc/total*360;
+      return `${p.color} ${start}deg ${end}deg`;
+    }).join(", ");
+  };
+  const certGradient = donutGradient([
+    { value:certCounts.received, color:"var(--green)" },
+    { value:certCounts.requested, color:"var(--gold)" },
+    { value:certCounts.pending, color:"var(--slate)" },
+  ]);
+
+  // Quote amount — each tender's quoted/awarded value, largest first
+  const quoteRows = tenders.map(t=>({ label:`${t.commodity} · ${t.id}`, value:parseCr(t.value) })).sort((a,b)=>b.value-a.value);
+  const maxQuote = Math.max(1, ...quoteRows.map(r=>r.value));
+
+  // Month vs quote — total quoted value per month, in chronological order
+  const monthMap = {};
+  tenders.forEach(t=>{
+    const d = new Date(t.notified);
+    const key = isNaN(d) ? "Unknown" : d.toLocaleDateString('en-GB',{month:'short',year:'numeric'});
+    monthMap[key] = (monthMap[key]||0) + parseCr(t.value);
+  });
+  const monthEntries = Object.entries(monthMap).sort((a,b)=> new Date("01 "+a[0]) - new Date("01 "+b[0]));
+  const maxMonth = Math.max(1, ...monthEntries.map(e=>e[1]));
+
+  document.getElementById("app").innerHTML = `
+    <div class="analytics-grid">
+      <div class="kpi-tile"><div class="kn">${tenders.length}</div><div class="kl">Total tenders</div></div>
+      <div class="kpi-tile"><div class="kn">${activeCount}</div><div class="kl">Active tenders</div><div class="kd up">${completedCount} completed</div></div>
+      <div class="kpi-tile"><div class="kn">₹${totalValue.toFixed(1)}Cr</div><div class="kl">Total quote value</div></div>
+      <div class="kpi-tile"><div class="kn">${avgProgress}%</div><div class="kl">Average progress</div></div>
+      <div class="kpi-tile"><div class="kn">${allBills.length}</div><div class="kl">Bills raised</div><div class="kd ${billRejected?'warn':'up'}">${billRejected} rejected, resubmitting</div></div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-card">
+        <h3>Region-wise completion certificates</h3>
+        <div class="chart-sub">Status across every region in every tender</div>
+        <div class="donut-wrap">
+          <div class="donut" style="width:130px;height:130px;border-radius:50%;background:conic-gradient(${certGradient});flex:none;"></div>
+          <div class="donut-legend">
+            <div class="li"><span class="sw" style="background:var(--green);"></span>Received — ${certCounts.received}</div>
+            <div class="li"><span class="sw" style="background:var(--gold);"></span>Requested — ${certCounts.requested}</div>
+            <div class="li"><span class="sw" style="background:var(--slate);"></span>Not yet requested — ${certCounts.pending}</div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Quote amount</h3>
+        <div class="chart-sub">Quoted value by tender, largest first</div>
+        ${quoteRows.map(r=>{
+          const pct = Math.round(r.value/maxQuote*100);
+          return `<div class="bar-row"><div class="blbl" title="${r.label}">${r.label}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div><div class="bar-val">₹${r.value.toFixed(1)}Cr</div></div>`;
+        }).join("") || `<div class="qa-item">No tenders yet.</div>`}
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-card" style="grid-column:1/-1;">
+        <h3>Month vs quote</h3>
+        <div class="chart-sub">Total quoted value by the month a tender was notified</div>
+        ${monthEntries.map(([month,val])=>{
+          const pct = Math.round(val/maxMonth*100);
+          return `<div class="bar-row"><div class="blbl" title="${month}">${month}</div><div class="bar-track"><div class="bar-fill green" style="width:${pct}%"></div></div><div class="bar-val">₹${val.toFixed(1)}Cr</div></div>`;
+        }).join("") || `<div class="qa-item">No tenders yet.</div>`}
+      </div>
+    </div>
+  `;
+}
+
+/* ================= render: admin ================= */
+function renderAdmin(){
+  const el = document.getElementById("app");
+  if(adminTab==="region"){
+    el.innerHTML = `
+      <div class="card">
+        <div class="admin-note">This is the master list of regions/godowns TNCSC operates across. Names here are what get suggested when a tender sets up its region-wise tonnage allocation in the Allocation Stage — add or rename a region here and it's available to every tender.</div>
+        <div class="admin-add-row">
+          <input class="aname" id="newMasterRegion" placeholder="Region name, e.g. Salem Town">
+          <button id="addMasterRegionBtn">+ Add region</button>
+        </div>
+        <div class="admin-list">
+          ${regionMasterConfig.map((name,ri)=>`
+            <div class="admin-row">
+              <span class="aidx">${String(ri+1).padStart(2,'0')}</span>
+              <input data-mregion="${ri}" value="${name}">
+              <button class="rm-admin" data-rmmregion="${ri}">Remove</button>
+            </div>`).join("") || `<div class="qa-item">No regions in the master list yet — add one above.</div>`}
+        </div>
+      </div>`;
+
+    document.getElementById("addMasterRegionBtn").onclick = ()=>{
+      const inp = document.getElementById("newMasterRegion");
+      const name = inp.value.trim();
+      if(!name) return;
+      regionMasterConfig.push(name);
+      renderAdmin();
+    };
+    el.querySelectorAll("[data-mregion]").forEach(inp=>{
+      inp.onchange = (e)=>{ const ri = parseInt(e.target.dataset.mregion); regionMasterConfig[ri] = e.target.value.trim() || regionMasterConfig[ri]; renderAdmin(); };
+    });
+    el.querySelectorAll("[data-rmmregion]").forEach(btn=>{
+      btn.onclick = ()=>{ regionMasterConfig.splice(parseInt(btn.dataset.rmmregion),1); renderAdmin(); };
+    });
+
+  } else {
+    el.innerHTML = `
+      <div class="card">
+        <div class="admin-note">This is the sign-off chain every bill in the Billing &amp; Payment Stage moves through, top to bottom — each section named to the approver who signs off on it. A bill that's rejected anywhere in the chain restarts from Section 01 — so reordering this list changes that behaviour for every tender, including bills already mid-audit.</div>
+        <div class="admin-add-row">
+          <input class="aname" id="newSectionName" placeholder="Section name, e.g. Audit Section">
+          <input class="arole" id="newSectionRole" placeholder="Approver name, e.g. R. Kumar">
+          <button id="addSectionBtn">+ Add section to chain</button>
+        </div>
+        <div class="admin-list">
+          ${billSectionsConfig.map((s,si)=>`
+            <div class="admin-row">
+              <span class="aidx">${String(si+1).padStart(2,'0')}</span>
+              <input data-sectionname="${si}" value="${s.name}" placeholder="Section name">
+              <input data-sectionrole="${si}" value="${s.role}" placeholder="Approver name">
+              <div class="order-btns">
+                <button data-moveup="${si}" ${si===0?'disabled':''} title="Move earlier">&#9650;</button>
+                <button data-movedown="${si}" ${si===billSectionsConfig.length-1?'disabled':''} title="Move later">&#9660;</button>
+              </div>
+              <button class="rm-admin" data-rmsection="${si}" ${billSectionsConfig.length<=1?'disabled':''}>Remove</button>
+            </div>`).join("") || `<div class="qa-item">No sections in the chain yet — add one above.</div>`}
+        </div>
+      </div>`;
+
+    document.getElementById("addSectionBtn").onclick = ()=>{
+      const nameInp = document.getElementById("newSectionName");
+      const roleInp = document.getElementById("newSectionRole");
+      const name = nameInp.value.trim();
+      if(!name) return;
+      billSectionsConfig.push({ name, role: roleInp.value.trim() || "Unassigned" });
+      renderAdmin();
+    };
+    el.querySelectorAll("[data-sectionname]").forEach(inp=>{
+      inp.onchange = (e)=>{ const si = parseInt(e.target.dataset.sectionname); billSectionsConfig[si].name = e.target.value.trim() || billSectionsConfig[si].name; renderAdmin(); };
+    });
+    el.querySelectorAll("[data-sectionrole]").forEach(inp=>{
+      inp.onchange = (e)=>{ const si = parseInt(e.target.dataset.sectionrole); billSectionsConfig[si].role = e.target.value.trim() || billSectionsConfig[si].role; renderAdmin(); };
+    });
+    el.querySelectorAll("[data-moveup]").forEach(btn=>{
+      btn.onclick = ()=>{
+        const si = parseInt(btn.dataset.moveup);
+        if(si>0){ [billSectionsConfig[si-1], billSectionsConfig[si]] = [billSectionsConfig[si], billSectionsConfig[si-1]]; clampBillProgressToSections(); renderAdmin(); }
+      };
+    });
+    el.querySelectorAll("[data-movedown]").forEach(btn=>{
+      btn.onclick = ()=>{
+        const si = parseInt(btn.dataset.movedown);
+        if(si<billSectionsConfig.length-1){ [billSectionsConfig[si+1], billSectionsConfig[si]] = [billSectionsConfig[si], billSectionsConfig[si+1]]; clampBillProgressToSections(); renderAdmin(); }
+      };
+    });
+    el.querySelectorAll("[data-rmsection]").forEach(btn=>{
+      btn.onclick = ()=>{
+        if(billSectionsConfig.length<=1) return;
+        billSectionsConfig.splice(parseInt(btn.dataset.rmsection),1);
+        clampBillProgressToSections();
+        renderAdmin();
+      };
+    });
+  }
+}
+// Keeps every tender's in-progress bills from pointing past the end of the chain after Admin reorders/removes a section
+function clampBillProgressToSections(){
+  const len = billSectionsConfig.length;
+  tenders.forEach(t=> (t.bills||[]).forEach(b=>{ b.passUpto = Math.min(b.passUpto, len); }));
+}
+
 /* ================= modal: new tender ================= */
 document.getElementById("cancelModal").onclick = ()=> document.getElementById("modalOverlay").classList.remove("open");
 document.getElementById("saveModal").onclick = ()=>{
   const id = document.getElementById("f-id").value.trim() || "TN/CS/2026/0"+(90+tenders.length);
   const commodity = document.getElementById("f-commodity").value.trim() || "Rice (PDS)";
   const region = document.getElementById("f-region").value.trim() || "Chennai";
-  tenders.unshift({ id, commodity, region, value:"₹—", notified:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}), status:"Active", ...makeProgress(0, [], []) });
+  tenders.unshift({ id, commodity, region, value:"₹—", notified:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}), status:"Active", ...makeProgress(0, [], []), regions: [], trucks: [], bills: [] });
   document.getElementById("modalOverlay").classList.remove("open");
   ["f-id","f-commodity","f-region"].forEach(id=>document.getElementById(id).value="");
   renderDashboard();
@@ -466,13 +970,42 @@ function stageStatus(i){
   if(i === t.currentIndex) return "current";
   return "pending";
 }
+function truckComplete(st, truck){
+  return st.dispatchDocs.every((_,j)=> truck.dispatchDocs[j]) && st.deliveryDocs.every((_,j)=> truck.deliveryDocs[j]);
+}
+// Net tonnage a delivered lorry actually counts toward its region, after any recorded shortage/overage/damage
+function truckNetTons(tr){
+  const base = Number(tr.tons)||0;
+  if(!tr.variance || tr.variance.type==="none") return base;
+  const qty = Number(tr.variance.qty)||0;
+  if(tr.variance.type==="overage") return base + qty;
+  return Math.max(0, base - qty); // shortage or damage both reduce what's counted as delivered
+}
+function regionDeliveredTons(t, ri){
+  const st = stageTemplate[TRUCK_STAGE_INDEX];
+  return t.trucks.filter(tr=> tr.region===ri && truckComplete(st, tr)).reduce((sum,tr)=> sum + truckNetTons(tr), 0);
+}
+function regionAllocatedTons(t, ri){ return t.regions[ri].allocatedTons; }
+function regionFullySupplied(t, ri){ return regionDeliveredTons(t, ri) >= regionAllocatedTons(t, ri); }
+// The "active" region is the first one not yet fully supplied — everything before it should already be ticked off
+function activeRegionIndex(t){
+  const idx = t.regions.findIndex(( _, ri)=> !regionFullySupplied(t, ri));
+  return idx === -1 ? t.regions.length-1 : idx;
+}
 function stageComplete(t, i){
   const st = stageTemplate[i];
   const stepsOk = st.asQuestions
     ? st.steps.every((_,j)=> (t.answers[i+"-"+j]||"").trim().length>0)
     : st.steps.every((_,j)=> t.checks[i+"-"+j]);
   const docsOk = !st.docs || st.docs.length===0 || st.docs.every((_,j)=> t.docs[i+"-"+j]);
-  return stepsOk && docsOk;
+  const trucksOk = !st.truckStage || (t.trucks.length>0 && t.trucks.every(tr=> truckComplete(st, tr)));
+  // Supply stage: every region must be fully delivered and have at least *requested* its completion certificate from ECN
+  const regionsOk = !st.truckStage || (t.regions && t.regions.length>0 && t.regions.every((_,ri)=> regionFullySupplied(t,ri) && t.regions[ri].cert.status!=="pending"));
+  // Completion stage: the certificate requested back in Supply must now actually be *received* for every region
+  const certReceivedOk = !st.regionCertStage || (t.regions && t.regions.length>0 && t.regions.every(r=> r.cert.status==="received" && r.cert.doc));
+  const regionAllocOk = !st.regionAllocStage || (t.regions && t.regions.length>0 && t.regions.every(r=> (r.allocatedTons||0)>0 && r.subAllotmentDoc));
+  const billsOk = !st.billStage || (t.bills.length>0 && t.bills.every(b=> b.passUpto >= billSections().length));
+  return stepsOk && docsOk && trucksOk && regionsOk && certReceivedOk && regionAllocOk && billsOk;
 }
 
 function renderTenderDetail(){
@@ -520,11 +1053,19 @@ function renderStepper(){
       </div>
     </div>`;
   }).join("");
-  el.querySelectorAll(".step").forEach(n=> n.onclick = ()=>{ selectedStage=parseInt(n.dataset.idx); renderStepperAndDetail(); });
-  const sel = el.querySelector(".step.selected");
-  if(sel) sel.scrollIntoView({behavior:"smooth", inline:"center", block:"nearest"});
+  el.querySelectorAll(".step").forEach(n=> n.onclick = ()=>{ selectedStage=parseInt(n.dataset.idx); renderStepperAndDetail(true); window.scrollTo({top:0, behavior:"smooth"}); });
 }
-function renderStepperAndDetail(){ renderStepper(); renderStageDetail(); renderProgressStrip(); }
+// Pass scrollTab=true only when the user is actually switching stages (tab click, prev/next stage buttons).
+// Field edits within a stage (checkboxes, uploads, region/lorry inputs, etc.) re-render without touching scroll position.
+function renderStepperAndDetail(scrollTab){
+  renderStepper();
+  renderStageDetail();
+  renderProgressStrip();
+  if(scrollTab){
+    const sel = document.querySelector("#stepper .step.selected");
+    if(sel) sel.scrollIntoView({behavior:"smooth", inline:"center", block:"nearest"});
+  }
+}
 
 function renderStageDetail(){
   const i = selectedStage;
@@ -535,7 +1076,7 @@ function renderStageDetail(){
   const complete = stageComplete(t, i);
   const isLast = i === STAGE_COUNT-1;
 
-  const docNames = st.docs || [];
+  const docNames = (!st.truckStage && st.docs) || [];
   const docsHtml = docNames.length ? `
     <div class="section-lbl">Supporting documents</div>
     <div class="doc-grid">
@@ -556,22 +1097,313 @@ function renderStageDetail(){
       }).join("")}
     </div>` : "";
 
+  let truckHtml = "";
+  if(st.truckStage){
+    const trucks = t.trucks;
+    const regions = t.regions || [];
+    const doneCount = trucks.filter(tr=>truckComplete(st,tr)).length;
+    const activeRi = regions.length ? activeRegionIndex(t) : -1;
+
+    const regionHtml = `
+    <div class="section-lbl">Region-wise allocation</div>
+    <div class="region-list">
+      ${regions.map((r,ri)=>{
+        const delivered = regionDeliveredTons(t, ri);
+        const allocated = r.allocatedTons || 0;
+        const pct = allocated>0 ? Math.min(100, Math.round((delivered/allocated)*100)) : 0;
+        const supplied = regionFullySupplied(t, ri);
+        const certStatus = r.cert.status; // pending | requested | received
+        const tag = certStatus==="received" ? "certified" : supplied ? "supplied" : (ri===activeRi ? "active" : "pending");
+        const tagText = certStatus==="received" ? "Certificate received" : supplied ? "Fully supplied" : (ri===activeRi ? "Active region" : "Queued");
+        return `<div class="region-card ${supplied?'complete':''} ${certStatus==='received'?'certified':''}">
+          <div class="region-head">
+            <span class="rname-static">${r.name}</span>
+            <span class="region-tag ${tag}">${tagText}</span>
+          </div>
+          <div class="region-tons-row">
+            <span>Allocated <b class="mono">${allocated}</b> tons · Delivered (net of shortage/overage/damage) <b class="mono">${delivered}</b> tons</span>
+          </div>
+          <div class="region-track"><div class="region-fill ${supplied?'supplied':''}" style="width:${pct}%"></div></div>
+          <div class="region-cert-row">
+            ${!supplied ? `<span class="region-cert-status">Region ticks off automatically once its full allocation is delivered.</span>` :
+              certStatus==="pending" ? `<button class="cert-btn" data-reqcert="${ri}">Request completion certificate from ECN</button>` :
+              certStatus==="requested" ? `<span class="region-cert-status">Requested from ECN — receipt is confirmed later, in the Completion Stage.</span>` :
+              `<span class="region-cert-status">Certificate already received — see the Completion Stage for the record.</span>`}
+          </div>
+        </div>`;
+      }).join("") || `<div class="qa-item">No regions have been allocated for this spell yet — set the region-wise tonnage allocation in the Allocation Stage first, then come back here to assign lorries against it.</div>`}
+    </div>`;
+
+    truckHtml = `
+    ${regionHtml}
+    <div class="section-lbl">Lorry-wise dispatch &amp; delivery register</div>
+    <div class="truck-summary-strip">
+      <div class="pill"><b>${trucks.length}</b> lorries added</div>
+      <div class="pill"><b>${doneCount}</b> fully documented</div>
+      <div class="pill"><b>${trucks.length-doneCount}</b> pending delivery docs</div>
+    </div>
+    <button class="add-truck-btn" id="addTruckBtn">+ Add lorry / dispatch invoice</button>
+    <div class="truck-list">
+      ${trucks.map((tr,ti)=>{
+        const complete = truckComplete(st, tr);
+        const dCount = st.dispatchDocs.filter((_,j)=>tr.dispatchDocs[j]).length;
+        const lCount = st.deliveryDocs.filter((_,j)=>tr.deliveryDocs[j]).length;
+        const open = openTruckIdx===ti;
+        const ackUploaded = !!tr.deliveryDocs[0]; // "Acknowledgement" is deliveryDocs[0]
+        const variance = tr.variance || { type:"none", qty:0, notes:"" };
+        return `<div class="truck-card ${complete?'complete':''} ${open?'open':''}" data-truck="${ti}">
+          <div class="truck-head" data-toggle="${ti}">
+            <span class="caret">&#9656;</span>
+            <span class="tid">${tr.id}${tr.vehicleNo?` <span style="color:var(--slate);font-weight:400;">· ${tr.vehicleNo}</span>`:''}</span>
+            <span class="tprog">Dispatch ${dCount}/${st.dispatchDocs.length} · Delivery ${lCount}/${st.deliveryDocs.length}</span>
+            <span class="tstatus">${complete?'Complete':'In progress'}</span>
+            <button class="rm-truck" data-rmtruck="${ti}">Remove</button>
+          </div>
+          <div class="truck-body">
+            <div class="lorry-details">
+              <div class="glbl">Lorry &amp; route details</div>
+              <div class="lorry-details-grid">
+                <div class="lorry-field"><label>Vehicle registration no.</label><input data-truckfield="${ti}|vehicleNo" value="${tr.vehicleNo||''}" placeholder="TN 29 AB 1234"></div>
+                <div class="lorry-field"><label>Driver name</label><input data-truckfield="${ti}|driverName" value="${tr.driverName||''}" placeholder="Driver name"></div>
+                <div class="lorry-field"><label>Driver phone</label><input data-truckfield="${ti}|driverPhone" value="${tr.driverPhone||''}" placeholder="10-digit mobile"></div>
+                <div class="lorry-field"><label>Dispatch date</label><input type="date" data-truckfield="${ti}|dispatchDate" value="${tr.dispatchDate||''}"></div>
+              </div>
+              <div class="lorry-route">
+                <div class="lorry-field"><label>From (source depot)</label><input data-truckfield="${ti}|source" value="${tr.source||''}" placeholder="e.g. Regional Godown, Coimbatore"></div>
+                <span class="route-arrow">&#8594;</span>
+                <div class="lorry-field"><label>To (destination godown)</label><input data-truckfield="${ti}|destination" value="${tr.destination||''}" placeholder="${(regions[tr.region]&&regions[tr.region].name)||'e.g. Amanda Nagar godown'}"></div>
+              </div>
+            </div>
+            <div class="truck-region-row">
+              <label>Region</label>
+              <select data-truckregion="${ti}">
+                <option value="">Unassigned</option>
+                ${regions.map((r,ri)=>`<option value="${ri}" ${tr.region===ri?'selected':''}>${r.name}</option>`).join("")}
+              </select>
+              <label>Tonnage this lorry</label>
+              <input class="tons-edit" type="number" min="0" data-truckton="${ti}" value="${tr.tons||0}">
+            </div>
+            <div class="truck-doc-group">
+              <div class="glbl">Dispatch documents</div>
+              <div class="truck-doc-grid">
+                ${st.dispatchDocs.map((d,j)=>{
+                  const key = "t"+ti+"-dispatch-"+j;
+                  const up = tr.dispatchDocs[j];
+                  return `<div class="truck-doc-tile ${up?'uploaded':''}">
+                    <div class="dname">${d}</div>
+                    <div class="dstatus">${up?up.name:'Not uploaded'}</div>
+                    <input type="file" accept="*/*" style="display:none" id="file-${key}" data-truckfile="${ti}|dispatch|${j}">
+                    <button class="cap-btn" data-trucktrigger="${key}">${up?'Replace':'Upload'}</button>
+                  </div>`;
+                }).join("")}
+              </div>
+            </div>
+            <div class="truck-doc-group">
+              <div class="glbl">Delivery documents</div>
+              <div class="truck-doc-grid">
+                ${st.deliveryDocs.map((d,j)=>{
+                  const key = "t"+ti+"-delivery-"+j;
+                  const up = tr.deliveryDocs[j];
+                  return `<div class="truck-doc-tile ${up?'uploaded':''}">
+                    <div class="dname">${d}</div>
+                    <div class="dstatus">${up?up.name:'Not uploaded'}</div>
+                    <input type="file" accept="image/*,application/pdf" style="display:none" id="file-${key}" data-truckfile="${ti}|delivery|${j}">
+                    <button class="cap-btn" data-trucktrigger="${key}">${up?'Replace':'Capture / upload'}</button>
+                  </div>`;
+                }).join("")}
+              </div>
+            </div>
+            ${ackUploaded ? `
+            <div class="variance-block">
+              <div class="glbl">Shortage / overage / damage against invoiced quantity ${variance.type!=='none'?`<span class="variance-badge ${variance.type}">${variance.type}</span>`:'<span class="variance-badge none">none recorded</span>'}</div>
+              <div class="variance-row">
+                <select data-vartype="${ti}">
+                  <option value="none" ${variance.type==='none'?'selected':''}>No variance — full quantity received</option>
+                  <option value="shortage" ${variance.type==='shortage'?'selected':''}>Shortage</option>
+                  <option value="overage" ${variance.type==='overage'?'selected':''}>Overage</option>
+                  <option value="damage" ${variance.type==='damage'?'selected':''}>Damage</option>
+                </select>
+                <input class="vqty" type="number" min="0" placeholder="Tons" data-varqty="${ti}" value="${variance.qty||0}" ${variance.type==='none'?'disabled':''}>
+              </div>
+              <textarea rows="2" placeholder="Notes — e.g. bags torn in transit, weighbridge shortfall of 0.4t…" data-varnotes="${ti}" ${variance.type==='none'?'disabled':''}>${variance.notes||''}</textarea>
+            </div>` : `<div class="note" style="margin-top:12px;">Shortage / overage / damage can be recorded once the Acknowledgement is captured above.</div>`}
+          </div>
+        </div>`;
+      }).join("") || `<div class="qa-item">No lorries added yet for this spell.</div>`}
+    </div>`;
+  }
+
   let auditHtml = "";
-  if(st.auditTrail){
-    const sections = ["Business Section","Finance Section","IT Section","MD Section"];
-    const passUpto = status==="done" ? 4 : status==="current" ? 2 : 0;
-    auditHtml = `<div class="section-lbl">Audit trail</div>
-    <div class="audit-trail">${sections.map((sec,idx)=>{
-      const cls = idx<passUpto ? "pass" : idx===passUpto ? "active" : "";
-      return `<div class="audit-node ${cls}"><div class="audit-connector"></div>
-        <div class="bubble">${idx<passUpto?'✓':idx+1}</div>
-        <div class="lbl">${sec}</div>
-        <div class="sub">${idx<passUpto?'Cleared':idx===passUpto?'Under review':'Queued'}</div>
-      </div>`;
-    }).join("")}</div>`;
+  if(st.billStage){
+    const sections = billSections();
+    auditHtml = `
+    <div class="section-lbl">Bills raised this spell</div>
+    <button class="bill-add-btn" id="addBillBtn">+ Raise new bill for this period</button>
+    <div class="bill-list">
+      ${t.bills.map((b,bi)=>{
+        const cleared = b.passUpto >= sections.length;
+        const hasDoc = !!b.doc;
+        const rejecting = openRejectBillIdx === bi;
+        const docKey = "bill-"+bi;
+        const regionNames = (b.regions||[]).map(ri=> t.regions && t.regions[ri] ? t.regions[ri].name : null).filter(Boolean);
+        return `<div class="bill-card ${cleared?'cleared':''} ${b.restartCount?'restarted':''} ${b.rejection?'rejected':''}">
+          <div class="bill-head">
+            <div>
+              <div class="bid">${b.id} <span style="font-weight:400;color:var(--slate);">· ${b.period}</span></div>
+              <div class="bperiod">${cleared?'Cleared — payment released':b.rejection?'Rejected — resubmission required':hasDoc?'In audit':'Awaiting bill upload'}${b.restartCount?` · resubmitted ${b.restartCount}x`:''}</div>
+              <div class="bregions">${regionNames.length ? 'Covers: '+regionNames.join(', ') : 'No region assigned yet'}</div>
+            </div>
+            <div class="bvalue">${b.value}</div>
+          </div>
+
+          ${b.rejection ? `<div class="note alert" style="margin:10px 0;">Sent back by <b>${b.rejection.sectionName}</b>: ${b.rejection.reason} Correct the bill and re-upload it below to restart the audit chain.</div>` : ""}
+
+          <div class="bill-region-block">
+            <div class="glbl">Region(s) this bill covers</div>
+            <div class="bill-region-chips">
+              ${(t.regions||[]).map((r,ri)=>{
+                const checked = (b.regions||[]).includes(ri);
+                return `<label class="bill-region-chip ${checked?'checked':''}">
+                  <input type="checkbox" data-billregion="${bi}|${ri}" ${checked?'checked':''}>
+                  ${r.name}
+                </label>`;
+              }).join("") || `<span class="bill-region-empty">No regions allocated yet — add them in the Supply, Dispatch &amp; Delivery stage first.</span>`}
+            </div>
+          </div>
+
+          <div class="bill-doc-row">
+            <div class="bill-doc-tile ${hasDoc?'uploaded':''}">
+              <div class="dname">Bill / Invoice document</div>
+              <div class="dstatus">${hasDoc?b.doc.name:'Not uploaded'}</div>
+              <input type="file" accept="application/pdf,image/*" style="display:none" id="file-${docKey}" data-billdoc="${bi}">
+              <button class="cap-btn" data-billtrigger="${docKey}">${hasDoc?'Replace / resubmit':'Upload bill document'}</button>
+            </div>
+          </div>
+
+          <div class="audit-trail">${sections.map((sec,idx)=>{
+            const cls = idx<b.passUpto ? "pass" : idx===b.passUpto ? "active" : "";
+            return `<div class="audit-node ${cls}"><div class="audit-connector"></div>
+              <div class="bubble">${idx<b.passUpto?'✓':idx+1}</div>
+              <div class="lbl">${sec.name}</div>
+              <div class="sub">${idx<b.passUpto?'Cleared':idx===b.passUpto?(hasDoc?'Under review — '+sec.role:'Waiting on bill upload'):'Queued'}</div>
+            </div>`;
+          }).join("")}</div>
+
+          ${(b.approvals&&b.approvals.length) ? `
+          <div class="approval-log">
+            <div class="glbl">Approver comments</div>
+            ${b.approvals.map(a=>`<div class="approval-log-item"><b>${a.sectionName}</b> <span class="alog-role">(${a.role})</span> — ${a.comment}</div>`).join("")}
+          </div>` : ""}
+
+          ${!cleared && hasDoc ? `
+          <div class="approval-panel">
+            <div class="approval-lbl">Approval — ${sections[b.passUpto].name} <span style="font-weight:400;color:var(--slate);">(${sections[b.passUpto].role})</span></div>
+            ${!rejecting ? `
+            <div class="approve-form">
+              <label>Approver comments <span style="font-weight:400;color:var(--rust);">(required to approve)</span></label>
+              <textarea id="approveComment-${bi}" rows="2" placeholder="e.g. Verified against dispatch invoices and weighment slips — figures tally."></textarea>
+              <div class="approval-actions">
+                <button class="approve-btn" id="approveBtn-${bi}" data-approvebill="${bi}" disabled>&#10003; Approve — clear ${sections[b.passUpto].name}</button>
+                <button class="reject-btn" data-openreject="${bi}">&#10007; Reject — send back for resubmission</button>
+              </div>
+            </div>` : `
+            <div class="reject-form">
+              <label>Reason for rejection</label>
+              <textarea id="rejectReason-${bi}" rows="2" placeholder="Explain what needs to be corrected before resubmission…"></textarea>
+              <div class="approval-actions">
+                <button class="reject-btn" data-confirmreject="${bi}">Confirm reject &amp; send back</button>
+                <button class="nav-btn" data-cancelreject="${bi}">Cancel</button>
+              </div>
+            </div>`}
+          </div>` : ""}
+          ${!cleared && !hasDoc ? `<div class="note" style="margin-top:12px;">Upload the bill document above to open it for approval.</div>` : ""}
+        </div>`;
+      }).join("") || `<div class="qa-item">No bills raised yet for this spell.</div>`}
+    </div>`;
   }
 
   const nextLabel = isLast ? "Save and complete tender" : `Save and continue to ${stageTemplate[i+1].phase} \u2192`;
+
+  let certHtml = "";
+  if(st.regionCertStage){
+    const regions = t.regions || [];
+    certHtml = `
+    <div class="section-lbl">Region-wise completion certificates</div>
+    <div class="region-list">
+      ${regions.map((r,ri)=>{
+        const certStatus = r.cert.status; // pending | requested | received
+        const tag = certStatus==="received" ? "certified" : certStatus==="requested" ? "active" : "pending";
+        const tagText = certStatus==="received" ? "Certificate received" : certStatus==="requested" ? "Requested — awaiting ECN" : "Not yet requested";
+        const hasCertDoc = !!r.cert.doc;
+        const certDocKey = "certdoc-"+ri;
+        return `<div class="region-card ${certStatus==='received'?'certified':''}">
+          <div class="region-head">
+            <span style="font-family:'Fraunces',serif;font-size:14.5px;font-weight:600;flex:1;">${r.name}</span>
+            <span class="region-tag ${tag}">${tagText}</span>
+          </div>
+
+          ${certStatus!=="pending" ? `
+          <div class="bill-doc-row">
+            <div class="bill-doc-tile ${hasCertDoc?'uploaded':''}">
+              <div class="dname">Completion Certificate — ${r.name}</div>
+              <div class="dstatus">${hasCertDoc?r.cert.doc.name:'Not uploaded'}</div>
+              <input type="file" accept="application/pdf,image/*" style="display:none" id="file-${certDocKey}" data-certdoc="${ri}">
+              <button class="cap-btn" data-certtrigger="${certDocKey}">${hasCertDoc?'Replace':'Upload'}</button>
+            </div>
+          </div>` : ""}
+
+          <div class="region-cert-row">
+            ${certStatus==="received" ? `<span class="region-cert-status">Received — this region is cleared for the release stages that follow.</span>` :
+              certStatus==="requested" ? (hasCertDoc
+                ? `<button class="cert-btn recv" data-recvcert="${ri}">Mark certificate received</button>`
+                : `<span class="region-cert-status">Upload the certificate document above before marking it received.</span>`) :
+              `<span class="region-cert-status">Not yet requested — go back to the Supply, Dispatch &amp; Delivery stage once this region's allocation is fully delivered, and request it from there.</span>`}
+          </div>
+        </div>`;
+      }).join("") || `<div class="qa-item">No regions were set up for this spell — set the region-wise tonnage allocation in the Allocation Stage first.</div>`}
+    </div>`;
+  }
+
+  let allocHtml = "";
+  if(st.regionAllocStage){
+    const regions = t.regions || [];
+    allocHtml = `
+    <div class="section-lbl">Region-wise tonnage allocation</div>
+    <div class="region-add-row">
+      <input class="rname" id="newRegionName" list="regionMasterList" placeholder="Pick a region, e.g. Chennai North — Amanda Nagar">
+      <datalist id="regionMasterList">
+        ${regionMasterConfig.map(name=>`<option value="${name}">`).join("")}
+      </datalist>
+      <input class="rtons" id="newRegionTons" type="number" min="0" placeholder="Tons e.g. 100">
+      <button id="addRegionBtn">+ Add region allocation</button>
+    </div>
+    <div class="region-add-hint">Suggestions come from the region master list in <b>Admin \u2192 Region Config</b> — you can still type a name that isn't in the list if this spell needs one.</div>
+    <div class="region-list">
+      ${regions.map((r,ri)=>{
+        const hasSubDoc = !!r.subAllotmentDoc;
+        const subDocKey = "subdoc-"+ri;
+        return `<div class="region-card">
+          <div class="region-head">
+            <input class="rname-edit" data-region-name="${ri}" value="${r.name}">
+            <button class="rm-region" data-rmregion="${ri}">Remove</button>
+          </div>
+          <div class="region-tons-row">
+            <span>Allocated</span>
+            <input class="rtons-edit" type="number" min="0" data-region-tons="${ri}" value="${r.allocatedTons||0}">
+            <span>tons</span>
+          </div>
+          <div class="bill-doc-row">
+            <div class="bill-doc-tile ${hasSubDoc?'uploaded':''}">
+              <div class="dname">Sub-allotment Letter — ${r.name}</div>
+              <div class="dstatus">${hasSubDoc?r.subAllotmentDoc.name:'Not uploaded'}</div>
+              <input type="file" accept="application/pdf,image/*" style="display:none" id="file-${subDocKey}" data-suballotdoc="${ri}">
+              <button class="cap-btn" data-suballottrigger="${subDocKey}">${hasSubDoc?'Replace':'Upload'}</button>
+            </div>
+          </div>
+        </div>`;
+      }).join("") || `<div class="qa-item">No regions added yet — add each region this spell covers and its tonnage above (e.g. Chennai North — Amanda Nagar, 100 tons), then attach that region's sub-allotment letter. This list carries through to the Supply and Completion stages, so it only needs setting up once.</div>`}
+    </div>`;
+  }
 
   const checklistHtml = st.asQuestions ? `
       <div class="section-lbl">Review questions</div>
@@ -615,11 +1447,14 @@ function renderStageDetail(){
 
       ${auditHtml}
       ${docsHtml}
+      ${truckHtml}
+      ${certHtml}
+      ${allocHtml}
 
       <div class="stage-nav-btns">
         <button class="nav-btn" id="prevStageBtn" ${i===0?'disabled':''}>&larr; Previous stage</button>
         <div class="nav-right">
-          <span class="gate-hint" style="${complete?'display:none':''}">Complete the ${st.asQuestions?'questions':'checklist'}${docNames.length?' and attach the required documents':''} to continue.</span>
+          <span class="gate-hint" style="${complete?'display:none':''}">Complete the ${st.asQuestions?'questions':'checklist'}${docNames.length?' and attach the required documents':''}${st.truckStage?' and finish every lorry\u2019s dispatch and delivery documents, then request the completion certificate for every region':''}${st.billStage?' and get every bill you\u2019ve raised approved through all sections':''}${st.regionCertStage?' and mark every region\u2019s completion certificate as received':''}${st.regionAllocStage?' and set up the region-wise tonnage allocation with each region\u2019s sub-allotment letter':''} to continue.</span>
           <button class="nav-btn" id="saveDraftBtn">Save as Draft</button>
           <button class="nav-btn primary" id="saveNextBtn" ${complete?'':'disabled'}>${nextLabel}</button>
         </div>
@@ -660,10 +1495,249 @@ function renderStageDetail(){
     btn.onclick = (e)=>{ e.stopPropagation(); delete t.docs[btn.dataset.remove]; renderStepperAndDetail(); };
   });
 
+  /* ---- region-wise allocation handlers ---- */
+  const addRegionBtn = document.getElementById("addRegionBtn");
+  if(addRegionBtn){
+    addRegionBtn.onclick = ()=>{
+      const nameInp = document.getElementById("newRegionName");
+      const tonsInp = document.getElementById("newRegionTons");
+      const name = nameInp.value.trim() || "Region "+((t.regions||[]).length+1);
+      const tons = Math.max(0, parseFloat(tonsInp.value)||0);
+      if(!t.regions) t.regions = [];
+      t.regions.push({ name, allocatedTons: tons, cert:{status:"pending"} });
+      renderStepperAndDetail();
+    };
+  }
+  el.querySelectorAll("[data-region-name]").forEach(inp=>{
+    inp.onchange = (e)=>{ t.regions[parseInt(e.target.dataset.regionName)].name = e.target.value.trim() || "Region"; renderStepperAndDetail(); };
+  });
+  el.querySelectorAll("[data-region-tons]").forEach(inp=>{
+    inp.onchange = (e)=>{ t.regions[parseInt(e.target.dataset.regionTons)].allocatedTons = Math.max(0, parseFloat(e.target.value)||0); renderStepperAndDetail(); };
+  });
+  el.querySelectorAll("[data-rmregion]").forEach(btn=>{
+    btn.onclick = ()=>{
+      const ri = parseInt(btn.dataset.rmregion);
+      t.regions.splice(ri,1);
+      // unassign any lorries that pointed at this region / shift indices down for lorries pointing past it
+      t.trucks.forEach(tr=>{
+        if(tr.region===ri) tr.region = null;
+        else if(tr.region!==null && tr.region>ri) tr.region -= 1;
+      });
+      renderStepperAndDetail();
+    };
+  });
+  el.querySelectorAll("[data-reqcert]").forEach(btn=>{
+    // Request the region-wise completion certificate from ECN — only enabled once the region's full allocation is delivered
+    btn.onclick = ()=>{ t.regions[parseInt(btn.dataset.reqcert)].cert.status = "requested"; renderStepperAndDetail(); };
+  });
+  el.querySelectorAll("[data-suballottrigger]").forEach(btn=>{
+    btn.onclick = ()=> document.getElementById("file-"+btn.dataset.suballottrigger).click();
+  });
+  el.querySelectorAll("input[type=file][data-suballotdoc]").forEach(inp=>{
+    inp.onchange = (e)=>{
+      const ri = parseInt(e.target.dataset.suballotdoc);
+      const file = e.target.files[0];
+      if(file){ t.regions[ri].subAllotmentDoc = { name:file.name }; renderStepperAndDetail(); }
+    };
+  });
+  el.querySelectorAll("[data-certtrigger]").forEach(btn=>{
+    btn.onclick = ()=> document.getElementById("file-"+btn.dataset.certtrigger).click();
+  });
+  el.querySelectorAll("input[type=file][data-certdoc]").forEach(inp=>{
+    inp.onchange = (e)=>{
+      const ri = parseInt(e.target.dataset.certdoc);
+      const file = e.target.files[0];
+      if(file){ t.regions[ri].cert.doc = { name:file.name }; renderStepperAndDetail(); }
+    };
+  });
+  el.querySelectorAll("[data-recvcert]").forEach(btn=>{
+    // Completion Stage: confirms ECN's response has landed — the certificate is now formally in hand for this region
+    btn.onclick = ()=>{ t.regions[parseInt(btn.dataset.recvcert)].cert.status = "received"; renderStepperAndDetail(); };
+  });
+
+  /* ---- truck (lorry) registry handlers ---- */
+  const addTruckBtn = document.getElementById("addTruckBtn");
+  if(addTruckBtn){
+    addTruckBtn.onclick = ()=>{
+      t.trucks.push({ id:"LRY-"+String(t.trucks.length+1).padStart(3,'0'), dispatchDocs:{}, deliveryDocs:{}, region:null, tons:30, variance:null, vehicleNo:"", driverName:"", driverPhone:"", source:"", destination:"", dispatchDate:"" });
+      openTruckIdx = t.trucks.length-1;
+      renderStepperAndDetail();
+    };
+  }
+  el.querySelectorAll("[data-toggle]").forEach(head=>{
+    head.onclick = ()=>{
+      const ti = parseInt(head.dataset.toggle);
+      openTruckIdx = openTruckIdx===ti ? null : ti;
+      renderStepperAndDetail();
+    };
+  });
+  el.querySelectorAll("[data-rmtruck]").forEach(btn=>{
+    btn.onclick = (e)=>{
+      e.stopPropagation();
+      t.trucks.splice(parseInt(btn.dataset.rmtruck),1);
+      openTruckIdx = null;
+      renderStepperAndDetail();
+    };
+  });
+  el.querySelectorAll("[data-trucktrigger]").forEach(btn=>{
+    btn.onclick = (e)=>{ e.stopPropagation(); document.getElementById("file-"+btn.dataset.trucktrigger).click(); };
+  });
+  el.querySelectorAll("input[type=file][data-truckfile]").forEach(inp=>{
+    inp.onchange = (e)=>{
+      const [ti, kind, j] = e.target.dataset.truckfile.split("|");
+      const file = e.target.files[0];
+      if(file){
+        const truck = t.trucks[parseInt(ti)];
+        (kind==="dispatch" ? truck.dispatchDocs : truck.deliveryDocs)[j] = { name:file.name };
+        // Acknowledgement is deliveryDocs[0] — the moment it lands, open up shortage/overage/damage capture automatically
+        if(kind==="delivery" && j==="0" && !truck.variance){ truck.variance = { type:"none", qty:0, notes:"" }; }
+        renderStepperAndDetail();
+      }
+    };
+  });
+
+  el.querySelectorAll("[data-truckfield]").forEach(inp=>{
+    inp.onchange = (e)=>{
+      const [ti, field] = e.target.dataset.truckfield.split("|");
+      t.trucks[parseInt(ti)][field] = e.target.value;
+    };
+  });
+  el.querySelectorAll("[data-truckregion]").forEach(sel=>{
+    sel.onchange = (e)=>{
+      const ti = parseInt(e.target.dataset.truckregion);
+      t.trucks[ti].region = e.target.value===""? null : parseInt(e.target.value);
+      renderStepperAndDetail();
+    };
+  });
+  el.querySelectorAll("[data-truckton]").forEach(inp=>{
+    inp.onchange = (e)=>{
+      const ti = parseInt(e.target.dataset.truckton);
+      t.trucks[ti].tons = Math.max(0, parseFloat(e.target.value)||0);
+      renderStepperAndDetail();
+    };
+  });
+  el.querySelectorAll("[data-vartype]").forEach(sel=>{
+    sel.onchange = (e)=>{
+      const ti = parseInt(e.target.dataset.vartype);
+      const truck = t.trucks[ti];
+      if(!truck.variance) truck.variance = { type:"none", qty:0, notes:"" };
+      truck.variance.type = e.target.value;
+      if(e.target.value==="none"){ truck.variance.qty = 0; }
+      renderStepperAndDetail();
+    };
+  });
+  el.querySelectorAll("[data-varqty]").forEach(inp=>{
+    inp.oninput = (e)=>{
+      const ti = parseInt(e.target.dataset.varqty);
+      const truck = t.trucks[ti];
+      if(!truck.variance) truck.variance = { type:"none", qty:0, notes:"" };
+      truck.variance.qty = Math.max(0, parseFloat(e.target.value)||0);
+      // update just the region delivered-tons figures without a full re-render / losing focus
+      const regionCard = el.querySelectorAll(".region-card")[truck.region];
+      if(regionCard){
+        const netEl = regionCard.querySelector(".region-tons-row b");
+        const track = regionCard.querySelector(".region-fill");
+        if(netEl && truck.region!==null){
+          const delivered = regionDeliveredTons(t, truck.region);
+          netEl.textContent = delivered;
+          if(track){ const alloc = t.regions[truck.region].allocatedTons||0; track.style.width = (alloc>0?Math.min(100,Math.round(delivered/alloc*100)):0)+"%"; }
+        }
+      }
+    };
+    inp.onchange = ()=> renderStepperAndDetail();
+  });
+  el.querySelectorAll("[data-varnotes]").forEach(ta=>{
+    ta.oninput = (e)=>{
+      const ti = parseInt(e.target.dataset.varnotes);
+      const truck = t.trucks[ti];
+      if(!truck.variance) truck.variance = { type:"none", qty:0, notes:"" };
+      truck.variance.notes = e.target.value;
+    };
+  });
+
+  /* ---- bill (billing & payment) handlers ---- */
+  const addBillBtn = document.getElementById("addBillBtn");
+  if(addBillBtn){
+    addBillBtn.onclick = ()=>{
+      t.bills.push({ id:"BILL-"+String(t.bills.length+1).padStart(3,'0'), period:"Week "+(t.bills.length+1), value:"₹—", doc:null, passUpto:0, restartCount:0, rejection:null, regions:[], approvals:[] });
+      renderStepperAndDetail();
+    };
+  }
+  el.querySelectorAll("[data-billregion]").forEach(cb=>{
+    cb.onchange = (e)=>{
+      const [bi, ri] = e.target.dataset.billregion.split("|").map(Number);
+      const bill = t.bills[bi];
+      if(!bill.regions) bill.regions = [];
+      if(e.target.checked){ if(!bill.regions.includes(ri)) bill.regions.push(ri); }
+      else { bill.regions = bill.regions.filter(x=>x!==ri); }
+      renderStepperAndDetail();
+    };
+  });
+  el.querySelectorAll("[data-billtrigger]").forEach(btn=>{
+    btn.onclick = ()=> document.getElementById("file-"+btn.dataset.billtrigger).click();
+  });
+  el.querySelectorAll("input[type=file][data-billdoc]").forEach(inp=>{
+    inp.onchange = (e)=>{
+      const bi = parseInt(e.target.dataset.billdoc);
+      const file = e.target.files[0];
+      if(file){
+        const bill = t.bills[bi];
+        bill.doc = { name:file.name };
+        // resubmitting after a rejection clears the rejection banner and re-arms the audit chain from the top
+        bill.rejection = null;
+        renderStepperAndDetail();
+      }
+    };
+  });
+  el.querySelectorAll("textarea[id^='approveComment-']").forEach(ta=>{
+    // Approve button stays disabled until the approver has actually written a comment
+    const bi = ta.id.split("-")[1];
+    const btn = document.getElementById("approveBtn-"+bi);
+    const sync = ()=>{ if(btn) btn.disabled = ta.value.trim().length===0; };
+    sync();
+    ta.oninput = sync;
+  });
+  el.querySelectorAll("[data-approvebill]").forEach(btn=>{
+    btn.onclick = ()=>{
+      const bi = parseInt(btn.dataset.approvebill);
+      const bill = t.bills[bi];
+      const sections = billSections();
+      const commentInp = document.getElementById("approveComment-"+bi);
+      const comment = commentInp ? commentInp.value.trim() : "";
+      if(!comment) return; // guarded by disabled state too, but double-check
+      if(!bill.approvals) bill.approvals = [];
+      bill.approvals.push({ sectionIdx: bill.passUpto, sectionName: sections[bill.passUpto].name, role: sections[bill.passUpto].role, comment });
+      bill.passUpto = Math.min(bill.passUpto+1, sections.length);
+      renderStepperAndDetail();
+    };
+  });
+  el.querySelectorAll("[data-openreject]").forEach(btn=>{
+    btn.onclick = ()=>{ openRejectBillIdx = parseInt(btn.dataset.openreject); renderStepperAndDetail(); };
+  });
+  el.querySelectorAll("[data-cancelreject]").forEach(btn=>{
+    btn.onclick = ()=>{ openRejectBillIdx = null; renderStepperAndDetail(); };
+  });
+  el.querySelectorAll("[data-confirmreject]").forEach(btn=>{
+    btn.onclick = ()=>{
+      const bi = parseInt(btn.dataset.confirmreject);
+      const bill = t.bills[bi];
+      const sections = billSections();
+      const reasonInp = document.getElementById("rejectReason-"+bi);
+      const reason = (reasonInp && reasonInp.value.trim()) || "No reason given.";
+      bill.rejection = { sectionIdx: bill.passUpto, sectionName: sections[bill.passUpto].name, reason };
+      bill.passUpto = 0;
+      bill.doc = null; // sent back to the bidder — the bill document has to be corrected and resubmitted
+      bill.approvals = []; // audit restarts from Business Section, so prior sign-offs no longer apply
+      bill.restartCount = (bill.restartCount||0) + 1;
+      openRejectBillIdx = null;
+      renderStepperAndDetail();
+    };
+  });
+
   const prevStage = document.getElementById("prevStageBtn");
   if(prevStage){
     prevStage.onclick = ()=>{
-      if(i>0){ selectedStage = i-1; renderTenderDetail(); }
+      if(i>0){ selectedStage = i-1; renderTenderDetail(); window.scrollTo({top:0, behavior:"smooth"}); }
     };
   }
   const saveDraft = document.getElementById("saveDraftBtn");
@@ -683,6 +1757,7 @@ function renderStageDetail(){
       t.currentIndex = Math.max(t.currentIndex, i+1);
       selectedStage = i+1;
       renderTenderDetail();
+      window.scrollTo({top:0, behavior:"smooth"});
     };
   }
 }
@@ -690,8 +1765,12 @@ function renderStageDetail(){
 /* ================= main render dispatch ================= */
 function render(){
   renderHeader();
+  renderSideNav();
   if(view==="dashboard") renderDashboard();
+  else if(view==="analytics") renderAnalytics();
+  else if(view==="admin") renderAdmin();
   else renderTenderDetail();
+  syncHeaderHeight();
 }
 render();
 </script>
