@@ -296,6 +296,12 @@
   .truck-region-row input.tons-edit{width:70px;font-family:"IBM Plex Mono",monospace;}
   .truck-region-row label{font-size:11px;color:var(--slate);font-weight:600;}
 
+  .pack-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);width:100%;}
+  .pack-row select, .pack-row input{padding:6px 9px;border:1px solid var(--line-strong);border-radius:6px;font-size:12px;font-family:inherit;}
+  .pack-row label{font-size:11px;color:var(--slate);font-weight:600;}
+  .pack-row input.unit-edit{width:80px;font-family:"IBM Plex Mono",monospace;}
+  .pack-row .tons-computed{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:700;color:var(--ink);background:var(--gold-pale);border:1px solid var(--gold);border-radius:6px;padding:6px 10px;}
+
   .lorry-details{margin-bottom:14px;}
   .lorry-details .glbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--slate);font-weight:600;margin-bottom:8px;}
   .lorry-details-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:10px;}
@@ -659,7 +665,13 @@ function tenderProgress(t){ return Math.round((Math.min(t.currentIndex,STAGE_COU
 function goAnalytics(){ view="analytics"; currentTenderId=null; render(); }
 function goDashboard(){ view="dashboard"; currentTenderId=null; render(); }
 function goAdmin(tab){ view="admin"; adminTab=tab; currentTenderId=null; render(); }
-function openTender(id){ view="tender"; currentTenderId=id; selectedStage=0; render(); }
+function openTender(id){
+  view="tender"; currentTenderId=id;
+  const t = tenders.find(x=>x.id===id);
+  // Land on the stage the tender is actually on, not always stage 1
+  selectedStage = t ? Math.min(t.currentIndex, STAGE_COUNT-1) : 0;
+  render();
+}
 
 /* ================= render: left nav ================= */
 function renderSideNav(){
@@ -973,6 +985,8 @@ function stageStatus(i){
 function truckComplete(st, truck){
   return st.dispatchDocs.every((_,j)=> truck.dispatchDocs[j]) && st.deliveryDocs.every((_,j)=> truck.deliveryDocs[j]);
 }
+// Rounds a tonnage figure to 3 decimals (kg-level precision) so bag/box math doesn't show float noise
+function round3(n){ return Math.round((Number(n)||0)*1000)/1000; }
 // Net tonnage a delivered lorry actually counts toward its region, after any recorded shortage/overage/damage
 function truckNetTons(tr){
   const base = Number(tr.tons)||0;
@@ -1180,9 +1194,25 @@ function renderStageDetail(){
                 <option value="">Unassigned</option>
                 ${regions.map((r,ri)=>`<option value="${ri}" ${tr.region===ri?'selected':''}>${r.name}</option>`).join("")}
               </select>
-              <label>Tonnage this lorry</label>
-              <input class="tons-edit" type="number" min="0" data-truckton="${ti}" value="${tr.tons||0}">
+              <label>Packing</label>
+              <select data-truckpack="${ti}">
+                <option value="loose" ${(!tr.packMode||tr.packMode==='loose')?'selected':''}>Loose (enter tonnage)</option>
+                <option value="unit" ${tr.packMode==='unit'?'selected':''}>Box / Bag (calculate from count)</option>
+              </select>
+              ${(!tr.packMode||tr.packMode==='loose') ? `
+                <label>Tonnage this lorry</label>
+                <input class="tons-edit" type="number" min="0" data-truckton="${ti}" value="${tr.tons||0}">
+              ` : ``}
             </div>
+            ${tr.packMode==='unit' ? `
+            <div class="pack-row">
+              <label>Per bag/box weight (kg)</label>
+              <input class="unit-edit" type="number" min="0" step="0.01" data-truckunitweight="${ti}" value="${tr.unitWeightKg||''}" placeholder="e.g. 50">
+              <label>No. of bags/boxes</label>
+              <input class="unit-edit" type="number" min="0" step="1" data-truckunitcount="${ti}" value="${tr.unitCount||''}" placeholder="e.g. 600">
+              <label>Tonnage this lorry</label>
+              <span class="tons-computed">${(Number(tr.tons)||0).toFixed(3)} t</span>
+            </div>` : ``}
             <div class="truck-doc-group">
               <div class="glbl">Dispatch documents</div>
               <div class="truck-doc-grid">
@@ -1559,7 +1589,7 @@ function renderStageDetail(){
   const addTruckBtn = document.getElementById("addTruckBtn");
   if(addTruckBtn){
     addTruckBtn.onclick = ()=>{
-      t.trucks.push({ id:"LRY-"+String(t.trucks.length+1).padStart(3,'0'), dispatchDocs:{}, deliveryDocs:{}, region:null, tons:30, variance:null, vehicleNo:"", driverName:"", driverPhone:"", source:"", destination:"", dispatchDate:"" });
+      t.trucks.push({ id:"LRY-"+String(t.trucks.length+1).padStart(3,'0'), dispatchDocs:{}, deliveryDocs:{}, region:null, tons:30, packMode:"loose", unitWeightKg:null, unitCount:null, variance:null, vehicleNo:"", driverName:"", driverPhone:"", source:"", destination:"", dispatchDate:"" });
       openTruckIdx = t.trucks.length-1;
       renderStepperAndDetail();
     };
@@ -1613,6 +1643,36 @@ function renderStageDetail(){
     inp.onchange = (e)=>{
       const ti = parseInt(e.target.dataset.truckton);
       t.trucks[ti].tons = Math.max(0, parseFloat(e.target.value)||0);
+      renderStepperAndDetail();
+    };
+  });
+  // Packing mode: loose (tonnage typed directly) vs box/bag (tonnage derived from unit weight x count)
+  el.querySelectorAll("[data-truckpack]").forEach(sel=>{
+    sel.onchange = (e)=>{
+      const ti = parseInt(e.target.dataset.truckpack);
+      const truck = t.trucks[ti];
+      truck.packMode = e.target.value;
+      if(truck.packMode === "unit"){
+        truck.tons = round3(((Number(truck.unitWeightKg)||0) * (Number(truck.unitCount)||0)) / 1000);
+      }
+      renderStepperAndDetail();
+    };
+  });
+  el.querySelectorAll("[data-truckunitweight]").forEach(inp=>{
+    inp.onchange = (e)=>{
+      const ti = parseInt(e.target.dataset.truckunitweight);
+      const truck = t.trucks[ti];
+      truck.unitWeightKg = Math.max(0, parseFloat(e.target.value)||0);
+      truck.tons = round3((truck.unitWeightKg * (Number(truck.unitCount)||0)) / 1000);
+      renderStepperAndDetail();
+    };
+  });
+  el.querySelectorAll("[data-truckunitcount]").forEach(inp=>{
+    inp.onchange = (e)=>{
+      const ti = parseInt(e.target.dataset.truckunitcount);
+      const truck = t.trucks[ti];
+      truck.unitCount = Math.max(0, parseFloat(e.target.value)||0);
+      truck.tons = round3(((Number(truck.unitWeightKg)||0) * truck.unitCount) / 1000);
       renderStepperAndDetail();
     };
   });
